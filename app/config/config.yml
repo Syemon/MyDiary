@@ -7,6 +7,7 @@ imports:
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: en
+    cache_type: file_system
 
 framework:
     #esi: ~
@@ -37,11 +38,14 @@ framework:
 twig:
     debug: '%kernel.debug%'
     strict_variables: '%kernel.debug%'
+    number_format:
+       thousands_separator: '.'
 
 # Doctrine Configuration
 doctrine:
     dbal:
         driver: pdo_mysql
+        server_version: 5.6
         host: '%database_host%'
         port: '%database_port%'
         dbname: '%database_name%'
@@ -67,3 +71,10 @@ swiftmailer:
     username: '%mailer_user%'
     password: '%mailer_password%'
     spool: { type: memory }
+
+doctrine_cache:
+    providers:
+        my_markdown_cache:
+            type: '%cache_type%'
+            file_system:
+                directory: '%kernel.cache_dir%/markdown_cache'
