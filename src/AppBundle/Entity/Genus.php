@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="AppBundle\Repository\GenusRepository")
@@ -19,6 +20,7 @@ class Genus
     private $id;
 
     /**
+     * @Assert\NotBlank()
      * @ORM\Column(type="string")
      */
     private $name;
@@ -30,6 +32,8 @@ class Genus
     private $subFamily;
 
     /**
+     * @Assert\NotBlank()
+     * @Assert\Range(min=0, minMessage="Must be in plus")
      * @ORM\Column(type="integer")
      */
     private $speciesCount;
@@ -50,6 +54,7 @@ class Genus
     private $firstDiscoveredAt;
 
     /**
+     * @Assert\NotBlank()
      * @ORM\OneToMany(targetEntity="GenusNote", mappedBy="genus")
      * @ORM\OrderBy({"createdAt" = "DESC"})
      */
@@ -95,7 +100,7 @@ class Genus
 
     public function getFunFact()
     {
-        return '**TEST** '.$this->funFact;
+        return $this->funFact;
     }
 
     public function setFunFact($funFact)
@@ -111,6 +116,11 @@ class Genus
     public function setIsPublished($isPublished)
     {
         $this->isPublished = $isPublished;
+    }
+
+    public function getisPublished()
+    {
+        return $this->isPublished;
     }
 
     /**
@@ -130,4 +140,10 @@ class Genus
     {
         $this->firstDiscoveredAt = $firstDiscoveredAt;
     }
+
+    public function getId()
+    {
+        return $this->id;
+    }
+
 }
