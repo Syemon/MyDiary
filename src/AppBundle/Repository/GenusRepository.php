@@ -1,13 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: szymon
- * Date: 21.12.17
- * Time: 18:44
- */
 
 namespace AppBundle\Repository;
-
 
 use AppBundle\Entity\Genus;
 use Doctrine\ORM\EntityRepository;
