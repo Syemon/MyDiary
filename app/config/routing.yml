@@ -6,3 +6,6 @@ homepage:
     path: /
     defaults:
         _controller: AppBundle:Main:homepage
+
+logout:
+    path: /logout
