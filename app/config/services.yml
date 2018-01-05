@@ -40,3 +40,6 @@ services:
         class: AppBundle\Service\MarkdownTransformer
         arguments: ['@markdown.parser']
         public: true
+
+    app.security.login_form_authenticator:
+        class: AppBundle\Security\LoginFormAuthenticator
