@@ -6,7 +6,7 @@ security:
         AppBundle\Entity\User: bcrypt
 
     role_hierarchy:
-        ROLE_ADMIN: [ROLE_MANAGE_GENUS]
+        ROLE_ADMIN: [ROLE_MANAGE_GENUS, ROLE_ALLOWED_TO_SWITCH]
 
     # https://symfony.com/doc/current/security.html#b-configuring-how-users-are-loaded
     providers:
@@ -27,6 +27,8 @@ security:
             logout:
                 path:   /logout
                 target: /
+
+            switch_user: ~
 
             # activate different ways to authenticate
 
