@@ -23,6 +23,8 @@ AppBundle\Entity\SubFamily:
 AppBundle\Entity\User:
     user_{1..10}:
         # use some fake data for this
-        email: weaverryan+<current()>@gmail.com
+        nickName: <lastName()>
+        phoneNumber: 11111111<current()>
+        email: fakemail<current()>@gmail.com
         plainPassword: iliketurtles
         roles: ['ROLE_ADMIN']
