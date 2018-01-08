@@ -11,7 +11,7 @@ security:
     # https://symfony.com/doc/current/security.html#b-configuring-how-users-are-loaded
     providers:
         our_users:
-            entity: { class: AppBundle\Entity\User, property: email}
+            entity: { class: AppBundle\Entity\User, property: phoneNumber}
 
     firewalls:
         # disables authentication for assets and the profiler, adapt it according to your needs

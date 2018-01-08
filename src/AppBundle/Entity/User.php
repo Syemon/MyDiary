@@ -17,7 +17,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity
  * @ORM\Table(name="user")
- * @UniqueEntity(fields={"email"}, message="You already have an account")
+ * @UniqueEntity(fields={"email", "phoneNumber"}, message="You already have an account")
  */
 class User implements UserInterface
 {
@@ -36,6 +36,19 @@ class User implements UserInterface
     private $email;
 
     /**
+     * @Assert\NotBlank()
+     * @ORM\Column(type="string", unique=true)
+     */
+    private $nickname;
+
+    /**
+     * @Assert\NotBlank()
+     * @Assert\Regex(pattern="/^[0-9]*$/", message="Phone number should look like: 111222333")
+     * @ORM\Column(type="string", unique=true)
+     */
+    private $phoneNumber;
+
+    /**
      * @ORM\Column(type="string")
      */
     private $password;
@@ -52,7 +65,7 @@ class User implements UserInterface
 
     public function getUsername()
     {
-        return $this->email;
+        return $this->phoneNumber;
     }
 
     public function getRoles()
@@ -109,4 +122,26 @@ class User implements UserInterface
     {
         return $this->email;
     }
+
+    public function getPhoneNumber()
+    {
+        return $this->phoneNumber;
+    }
+
+    public function setPhoneNumber($phoneNumber)
+    {
+        $this->phoneNumber = $phoneNumber;
+    }
+
+    public function getNickname()
+    {
+        return $this->nickname;
+    }
+
+    public function setNickname($nickname)
+    {
+        $this->nickname = $nickname;
+    }
+
+
 }
