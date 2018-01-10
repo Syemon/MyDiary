@@ -54,6 +54,11 @@ class Diary
         return $this->note;
     }
 
+    public function setNote($note)
+    {
+        $this->note = $note;
+    }
+
     public function getAttachment()
     {
         return $this->attachment;
