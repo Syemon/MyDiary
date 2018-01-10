@@ -9,13 +9,15 @@
 namespace AppBundle\Entity;
 
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use AppBundle\Entity\Diary;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\DiaryRepository")
  * @ORM\Table(name="user")
  * @UniqueEntity(fields={"email", "phoneNumber"}, message="You already have an account")
  */
@@ -27,6 +29,18 @@ class User implements UserInterface
      * @ORM\Column(type="integer")
      */
     private $id;
+
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Diary", mappedBy="user")
+     * @Assert\NotBlank()
+     * @ORM\OrderBy({"createdAt" = "DESC"})
+     */
+    private $diary;
+
+    public function __construct()
+    {
+        $this->diary = new ArrayCollection();
+    }
 
     /**
      * @Assert\NotBlank()
@@ -143,5 +157,17 @@ class User implements UserInterface
         $this->nickname = $nickname;
     }
 
+    /**
+     * @return ArrayCollection|Diary[]
+     */
+    public function getDiary()
+    {
+        return $this->diary;
+    }
+
+    public function __toString()
+    {
+        return $this->getEmail();
+    }
 
 }
