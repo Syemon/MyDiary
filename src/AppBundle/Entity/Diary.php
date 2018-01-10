@@ -8,6 +8,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="AppBundle\Repository\DiaryRepository")
+ * @ORM\HasLifecycleCallbacks()
  * @ORM\Table(name="diary")
  */
 class Diary
@@ -21,7 +22,7 @@ class Diary
 
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="diary")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn()
      */
     private $user;
 
@@ -39,7 +40,6 @@ class Diary
 
     /**
      * @ORM\Column(type="date")
-     * @Assert\NotBlank()
      */
     private $createdAt;
 
@@ -77,6 +77,14 @@ class Diary
     public function setCreatedAt($createdAt)
     {
         $this->createdAt = $createdAt;
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function setCreatedAtValue()
+    {
+        $this->createdAt = new \DateTime('now');
     }
 
     public function getId()
