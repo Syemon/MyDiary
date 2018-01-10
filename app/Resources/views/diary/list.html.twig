@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+
+            <div class="col-xs-12">
+                <div class="pull-right" style="margin-bottom: 10px; margin-top: 20px;">
+                    <a href="{{ path('admin_genus_new') }}" class="btn btn-primary pull-right">Add <span class="fa fa-plus-circle"></span></a>
+                </div>
+
+                <h1>Your Diaries</h1>
+
+                <table class="table table-striped">
+                    <tr>
+                        <th>User</th>
+                        <th>Title</th>
+                        <th>Note</th>
+                        <th>Attachment</th>
+                        <th>Date</th>
+                    </tr>
+
+                    {% for user in diaries %}
+                        <tr>
+                        {% for u in user.diary %}
+                            <tr>
+                                <td>{{ user.email}}</td>
+                                <td>{{ u.title }}</td>
+                                <td>{{ u.note }}</td>
+                                <td>{{ u.attachment }}</td>
+                                <td>{{ u.createdat|date("m/d/Y") }}</td>
+                            <td>
+                                <a href="{{ path('admin_genus_edit', {'id': user.id}) }}" class="btn btn-xs btn-success"><span class="fa fa-pencil"></span></a>
+                            </td>
+                        {% endfor %}
+                        </tr>
+                        {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

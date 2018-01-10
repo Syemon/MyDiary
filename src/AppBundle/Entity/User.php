@@ -170,4 +170,9 @@ class User implements UserInterface
         return $this->getEmail();
     }
 
+    public function getId()
+    {
+        return $this->id;
+    }
+
 }
