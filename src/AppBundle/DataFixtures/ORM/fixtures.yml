@@ -28,3 +28,11 @@ AppBundle\Entity\User:
         email: fakemail<current()>@gmail.com
         plainPassword: iliketurtles
         roles: ['ROLE_ADMIN']
+
+AppBundle\Entity\Diary:
+      diary_{1..10}:
+            # use some fake data for this
+        note: <sentence()>
+        createdAt: <dateTimeBetween('-6 months', 'now')>
+        user: '@user_*'
+        title: <lastName()>
