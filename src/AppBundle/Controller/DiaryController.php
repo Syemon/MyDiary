@@ -113,4 +113,25 @@ class DiaryController extends Controller
             'diaryForm' => $form->createView()
         ]);
     }
+
+    /**
+     * @Route("/diary/{id}/delete", name="diary_delete")
+     */
+    public function deleteAction($id)
+    {
+        $em = $this->getDoctrine()->getRepository('AppBundle:Diary');
+        $diary = $em->findOneBy(
+            array("id" => $id)
+        );
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($diary);
+        $em->flush();
+
+        $this->addFlash(
+            'success',
+            sprintf('Diary removed, (%s)', $this->getUser()->getEmail())
+        );
+
+        return $this->redirectToRoute('diary_list');
+    }
 }

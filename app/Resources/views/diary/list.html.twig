@@ -32,6 +32,9 @@
                             <td>
                                 <a href="{{ path('diary_edit', {'id': u.id}) }}" class="btn btn-xs btn-success"><span class="fa fa-pencil"></span></a>
                             </td>
+                            <td>
+                                <a href="{{ path('diary_delete', {'id': u.id}) }}" class="btn btn-xs btn-danger"><span class="fa fa-trash"></span></a>
+                            </td>
                         {% endfor %}
                         </tr>
                         {% endfor %}
