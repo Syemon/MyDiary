@@ -47,7 +47,7 @@ class DiaryController extends Controller
         $em = $this->getDoctrine()->getManager();
         $diaryCheck = $em->getRepository('AppBundle:User')
             ->findIfDiaryExists($user);
-        dump($diaryCheck);
+
         if (empty($diaryCheck)) {
             $form = $this->createForm(DiaryForm::class);
             $form->handleRequest($request);
@@ -80,5 +80,37 @@ class DiaryController extends Controller
         return $this->redirectToRoute('diary_list');
 
 
+    }
+
+    /**
+     * @Route("/diary/{id}/edit", name="diary_edit")
+     */
+    public function editAction(Request $request, Diary $diary)
+    {
+        $user = $this->getUser();
+        //$diary->setUser($user);
+
+        //$form = $this->createForm(DiaryForm::class, $diary);
+        $form = $this->createForm(DiaryForm::class, $diary);
+        dump($diary);
+        dump($request);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $diary = $form->getData();
+            $diary->setUser($user);
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($diary);
+            $em->flush();
+
+            $this->addFlash('success', 'Diary updated');
+
+            return $this->redirectToRoute('diary_list');
+        }
+
+        return $this->render('diary/edit.html.twig', [
+            'diaryForm' => $form->createView()
+        ]);
     }
 }

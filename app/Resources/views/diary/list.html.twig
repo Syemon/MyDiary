@@ -30,7 +30,7 @@
                                 <td>{{ u.attachment }}</td>
                                 <td>{{ u.createdat|date("m/d/Y") }}</td>
                             <td>
-                                <a href="{{ path('admin_genus_edit', {'id': user.id}) }}" class="btn btn-xs btn-success"><span class="fa fa-pencil"></span></a>
+                                <a href="{{ path('diary_edit', {'id': u.id}) }}" class="btn btn-xs btn-success"><span class="fa fa-pencil"></span></a>
                             </td>
                         {% endfor %}
                         </tr>
