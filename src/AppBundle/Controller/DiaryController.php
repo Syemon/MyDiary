@@ -44,27 +44,41 @@ class DiaryController extends Controller
     {
         $user = $this ->getUser();
 
-        $form = $this->createForm(DiaryForm::class);
-        $form->handleRequest($request);
+        $em = $this->getDoctrine()->getManager();
+        $diaryCheck = $em->getRepository('AppBundle:User')
+            ->findIfDiaryExists($user);
+        dump($diaryCheck);
+        if (empty($diaryCheck)) {
+            $form = $this->createForm(DiaryForm::class);
+            $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $diary = $form->getData();
-            $diary->setUser($user);
+            if ($form->isSubmitted() && $form->isValid()) {
+                $diary = $form->getData();
+                $diary->setUser($user);
 
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($diary);
-            $em->flush();
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($diary);
+                $em->flush();
 
-            $this->addFlash(
-                'success',
-                sprintf('Diary created, (%s)', $this->getUser()->getEmail())
-            );
+                $this->addFlash(
+                    'success',
+                    sprintf('Diary created, (%s)', $this->getUser()->getEmail())
+                );
 
-            return $this->redirectToRoute('diary_list');
+                return $this->redirectToRoute('diary_list');
+            }
+
+            return $this->render('diary/new.html.twig', [
+                'diaryForm' => $form->createView()
+            ]);
         }
+        $this->addFlash(
+            'danger',
+            sprintf('You can make only one entry per day (%s)', $this->getUser()->getEmail())
+        );
 
-        return $this->render('diary/new.html.twig', [
-            'diaryForm' => $form->createView()
-        ]);
+        return $this->redirectToRoute('diary_list');
+
+
     }
 }
