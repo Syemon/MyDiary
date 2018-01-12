@@ -34,7 +34,7 @@ class Diary
 
     /**
      * @ORM\Column(type="string", nullable=true)
-     * @Assert\File(mimeTypes={ "application/pdf" })
+     * @Assert\File(mimeTypes={ "application/pdf", "image/png", "image/jpeg" })
      */
     private $attachment;
 

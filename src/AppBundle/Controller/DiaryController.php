@@ -14,8 +14,12 @@ use AppBundle\Form\DiaryForm;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\User\UserInterface;
+use AppBundle\Service\FileUploader;
 
 class DiaryController extends Controller
 {
@@ -40,7 +44,7 @@ class DiaryController extends Controller
     /**
      * @Route("/diary/new", name="diary_new")
      */
-    public function newAction(Request $request)
+    public function newAction(Request $request, FileUploader $fileUploader)
     {
         $user = $this ->getUser();
 
@@ -55,6 +59,12 @@ class DiaryController extends Controller
             if ($form->isSubmitted() && $form->isValid()) {
                 $diary = $form->getData();
                 $diary->setUser($user);
+                $file = $diary->getAttachment();
+
+                if ($file!=null) {
+                    $fileName = $fileUploader->upload($file);
+                    $diary->setAttachment($fileName);
+                }
 
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($diary);
@@ -72,33 +82,44 @@ class DiaryController extends Controller
                 'diaryForm' => $form->createView()
             ]);
         }
+
         $this->addFlash(
             'danger',
             sprintf('You can make only one entry per day (%s)', $this->getUser()->getEmail())
         );
 
         return $this->redirectToRoute('diary_list');
-
-
     }
 
     /**
      * @Route("/diary/{id}/edit", name="diary_edit")
      */
-    public function editAction(Request $request, Diary $diary)
+    public function editAction($id, Request $request, Diary $diary, FileUploader $fileUploader)
     {
         $user = $this->getUser();
-        //$diary->setUser($user);
+        $em = $this->getDoctrine()->getManager();
+        $oldDiary = $em->getRepository('AppBundle:Diary')
+            ->findOneBy(
+                array("id" => $id)
+            );
 
-        //$form = $this->createForm(DiaryForm::class, $diary);
         $form = $this->createForm(DiaryForm::class, $diary);
-        dump($diary);
-        dump($request);
+        $previousFile = $oldDiary->getAttachment();
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $diary = $form->getData();
             $diary->setUser($user);
+            $file = $diary->getAttachment();
+
+            // Upload only if attachment is not null and delete old file
+            if ($file!=null) {
+                $fileName = $fileUploader->upload($file);
+                $diary->setAttachment($fileName);
+                $path = $this->container->getParameter('file_directory');
+                $filesystem = new Filesystem();
+                $filesystem->remove("$path/$previousFile");
+            }
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($diary);
@@ -123,9 +144,16 @@ class DiaryController extends Controller
         $diary = $em->findOneBy(
             array("id" => $id)
         );
+
+        $path = $this->container->getParameter('file_directory');
+        $file = $diary->getAttachment();
+
         $em = $this->getDoctrine()->getManager();
         $em->remove($diary);
         $em->flush();
+
+        $filesystem = new Filesystem();
+        $filesystem->remove("$path/$file");
 
         $this->addFlash(
             'success',
@@ -133,5 +161,15 @@ class DiaryController extends Controller
         );
 
         return $this->redirectToRoute('diary_list');
+    }
+
+    /**
+     * @Route("/uploads/files/{file}")
+     * @Method("GET")
+     */
+    public function getFiles($file)
+    {
+        $path = $this ->container->getParameter('file_directory');
+        return new BinaryFileResponse("$path/$file");
     }
 }

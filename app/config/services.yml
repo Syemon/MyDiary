@@ -36,6 +36,10 @@ services:
     AppBundle\DataFixtures\ORM\LoadFixtures:
           tags: [doctrine.fixture.orm]
 
+    AppBundle\Service\FileUploader:
+        arguments:
+            $targetDir: '%file_directory%'
+
     app.markdown_transformer:
         class: AppBundle\Service\MarkdownTransformer
         arguments: ['@markdown.parser']
