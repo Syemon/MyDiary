@@ -10,17 +10,13 @@
                     {{ form_row(form.nickname) }}
                     {{ form_row(form.email) }}
                     {{ form_row(form.phoneNumber) }}
-                    {{ form_row(form.current_password) }}
-                    {{ form_row(form.plainPassword.first, {
-                        'label': 'Password'
-                    }) }}
-                    {{ form_row(form.plainPassword.second, {
-                        'label': 'Repeat Password'
-                    }) }}
 
                     <button type="submit" class="btn btn-primary" formnovalidate>Edit</button>
+                <a href="{{ path('user_change_password') }}" >Change password</a>
                 {{ form_end(form) }}
+
             </div>
+
         </div>
     </div>
 {% endblock %}

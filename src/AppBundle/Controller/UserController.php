@@ -9,6 +9,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\User;
+use AppBundle\Form\UserChangePasswordForm;
 use AppBundle\Form\UserEditForm;
 use AppBundle\Form\UserRegistrationForm;
 use Doctrine\ORM\EntityManager;
@@ -71,15 +72,42 @@ class UserController extends Controller
 
             $user = $form->getData();
             $em = $this->getDoctrine()->getManager();
+            $em->persist($user);
+            $em->flush();
+            $this->addFlash('success', 'Profile edited'.$user->getEmail());
+        }
 
-            //$encoder = $this->get("app.password_encoder");
+        return $this->render('user/edit.html.twig', [
+            'form' => $form->createView()
+        ]);
+    }
+    /**
+     * @Route("/changePassword", name="user_change_password")
+     */
+    public function changePasswordAction(Request $request)
+    {
+        $userId = $this->getUser();
+
+        $em = $this->getDoctrine()->getRepository('AppBundle:User');
+        $user = $em->findOneBy(
+            array("id" => $userId)
+        );
+
+        $form = $this->createForm(UserChangePasswordForm::class, $user);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $user = $form->getData();
+            $em = $this->getDoctrine()->getManager();
+
             $encoder = $this->get("security.password_encoder")
                 ->encodePassword($user, $user->getPlainPassword());
             $user->setPassword($encoder);
 
             $em->persist($user);
             $em->flush();
-            $this->addFlash('success', 'Profile edited'.$user->getEmail());
+            $this->addFlash('success', 'Password has been changed'.$user->getEmail());
 
             return $this->get('security.authentication.guard_handler')
                 ->authenticateUserAndHandleSuccess(
@@ -90,7 +118,7 @@ class UserController extends Controller
                 );
         }
 
-        return $this->render('user/edit.html.twig', [
+        return $this->render('user/change_password.html.twig', [
             'form' => $form->createView()
         ]);
     }

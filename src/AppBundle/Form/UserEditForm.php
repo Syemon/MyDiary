@@ -19,43 +19,13 @@ class UserEditForm extends AbstractType
         $builder
             ->add('nickname')
             ->add('email', EmailType::class)
-            ->add('phoneNumber')
-            ->add(
-                'current_password',
-                PasswordType::class,
-                [
-                    'label' => 'form.current_password',
-                    'mapped' => false,
-                    'constraints' => [
-                        new NotBlank(),
-                        new UserPassword(
-                            [
-                                'message' => 'current_password.invalid',
-                            ]
-                        ),
-                    ],
-
-                ]
-            )
-            ->add(
-                'plainPassword',
-                RepeatedType::class,
-                [
-                    'type' => PasswordType::class,
-                    'invalid_message' => 'password.mismatch',
-                    'options' => ['attr' => ['class' => 'password-field']],
-                    'required' => true,
-                    'first_options' => ['label' => 'form.new_password'],
-                    'second_options' => ['label' => 'form.new_password_confirmation'],
-                ]
-            );
+            ->add('phoneNumber');
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
             'data_class' => User::class,
-            'validation_groups' => ['Default', 'Registration']
         ]);
     }
 }
