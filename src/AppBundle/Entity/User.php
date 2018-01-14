@@ -124,7 +124,6 @@ class User implements UserInterface
     public function setPlainPassword($plainPassword)
     {
         $this->plainPassword = $plainPassword;
-        $this->password = null;
     }
 
     public function setRoles($roles)

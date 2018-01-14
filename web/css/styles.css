@@ -57,23 +57,6 @@ body {
     color: #3a3a3a;
 }
 
-.search-bar {
-    height: 50px;
-    width: 100%;
-    display: none;
-}
-
-.sea-search > input {
-    width: 100%;
-    padding: 10px 20px;
-    font-size: 22px;
-}
-
-.search-input {
-    border: none;
-    margin: 0;
-}
-
 .header {
     padding: 10px 0;
     margin: 0 auto;
@@ -110,14 +93,14 @@ body {
     background-color: transparent;
 }
 
-.navi li:last-child a {
+.navi li a {
     background: #eee;
     border-radius: 2px;
     transition: 200ms ease-in-out;
     padding: 8px 16px 7px;
 }
 
-.navi li:last-child a:hover {
+.navi li a:hover {
     background: rgba(200, 200, 200, .5);
     color: #000;
 }
