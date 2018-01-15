@@ -12,6 +12,7 @@
                         <th>E-mail</th>
                         <th>Phone number</th>
                         <th>Account status</th>
+                        <th>Check user posts</th>
                         <th>Delete</th>
                     </tr>
                     {% for user in users %}
@@ -24,6 +25,9 @@
                             {% elseif user.isActive == 0 %}
                                 <td>Needs e-mail confirmation</td>
                             {% endif %}
+                            <td>
+                                <a href="{{ path('admin_user_diary', {'id': user.id}) }}" class="btn btn-xs btn-default"><span class="fa fa-eye"></span></a>
+                            </td>
                             <td>
                                 <a href="{{ path('admin_user_delete', {'id': user.id}) }}" class="btn btn-xs btn-danger"><span class="fa fa-trash"></span></a>
                             </td>

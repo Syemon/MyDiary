@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+
+            <div class="col-xs-12">
+                <div class="pull-right" style="margin-bottom: 10px; margin-top: 20px;">
+                    <a href="{{ path('diary_new') }}" class="btn btn-primary pull-right">Add <span class="fa fa-plus-circle"></span></a>
+                </div>
+
+                <h1>Your Diaries</h1>
+
+                <table class="table table-striped">
+                    <tr>
+                        <th>User</th>
+                        <th>Title</th>
+                        <th>Note</th>
+                        <th>Attachment</th>
+                        <th>Date</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
+                    </tr>
+
+                    {% for user in diaries %}
+                        {% for u in user.diary %}
+                            <tr>
+                                <td>{{ user.email}}</td>
+                                <td>{{ u.title }}</td>
+                                <td>{{ u.note }}</td>
+                                <td>
+                                    {% if u.attachment ends with '.pdf'%}
+                                        <a href="{{ asset('uploads/files/' ~ u.attachment) }}" class="btn btn-success"><span class="fa fa-file-pdf-o"></span></a>
+                                    {% elseif u.attachment ends with '.png' or u.attachment ends with '.jpeg' or u.attachment ends with '.jpg'%}
+                                        <a href="{{ asset('uploads/files/' ~ u.attachment) }}" class="btn btn-success"><span class="fa fa-file-image-o"></span></a>
+                                    {% else %}
+                                        <span class="fa fa-times"></span>
+                                    {% endif %}
+
+                                </td>
+                                <td>{{ u.createdat|date("m/d/Y") }}</td>
+                                <td>
+                                    <a href="{{ path('diary_edit', {'id': u.id}) }}" class="btn btn-xs btn-success"><span class="fa fa-pencil"></span></a>
+                                </td>
+                                <td>
+                                    <a href="{{ path('diary_delete', {'id': u.id}) }}" class="btn btn-xs btn-danger"><span class="fa fa-trash"></span></a>
+                                </td>
+                        {% endfor %}
+                            </tr>
+                        {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -70,4 +70,21 @@ class AdminController extends Controller
 
         return $this->redirectToRoute('admin_users_list');
     }
+    /**
+     * @Route("/users/{id}/diary", name="admin_user_diary")
+     */
+    public function showUserDiaryAction($id)
+    {
+        $em = $this->getDoctrine()->getRepository('AppBundle:User');
+        $user = $em->findOneBy([
+            "id" => $id
+        ]);
+
+        $diaries = $em
+            ->findAllUserDiaries($user);
+
+        return $this->render('diary/list.html.twig', [
+            'diaries' => $diaries,
+        ]);
+    }
 }

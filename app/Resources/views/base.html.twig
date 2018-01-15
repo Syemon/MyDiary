@@ -18,7 +18,8 @@
             <ul class="navi">
                 {% if is_granted('ROLE_ADMIN') %}
                     <li><a href="{{ path('diary_list') }}">Diary</a></li>
-                    <li><a href="{{ path('admin_diaries_list') }}">Admin</a></li>
+                    <li><a href="{{ path('admin_diaries_list') }}">Full diaries list</a></li>
+                    <li><a href="{{ path('admin_users_list') }}">Users list</a></li>
                     <li><a href="{{ path('user_edit') }}">Edit</a></li>
                     <li><a href="{{ path('security_logout') }}">Logout</a></li>
                 {% elseif is_granted('IS_AUTHENTICATED_FULLY') %}
@@ -55,7 +56,6 @@
 
         {% block javascripts %}
             <script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
-            <script src="{{ asset('js/main.js') }}"></script>
         {% endblock %}
     </body>
 </html>

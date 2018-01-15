@@ -21,7 +21,16 @@
                                     <td>{{ user.email}}</td>
                                     <td>{{ u.title }}</td>
                                     <td>{{ u.note }}</td>
-                                    <td>{{ u.attachment }}</td>
+                                    <td>
+                                        {% if u.attachment ends with '.pdf'%}
+                                            <a href="{{ asset('uploads/files/' ~ u.attachment) }}" class="btn btn-success"><span class="fa fa-file-pdf-o"></span></a>
+                                        {% elseif u.attachment ends with '.png' or u.attachment ends with '.jpeg' or u.attachment ends with '.jpg'%}
+                                            <a href="{{ asset('uploads/files/' ~ u.attachment) }}" class="btn btn-success"><span class="fa fa-file-image-o"></span></a>
+                                        {% else %}
+                                            <span class="fa fa-times"></span>
+                                        {% endif %}
+
+                                    </td>
                                     <td>{{ u.createdat|date("m/d/Y") }}</td>
                                 </tr>
                         {% endfor %}
