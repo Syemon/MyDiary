@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: szymon
- * Date: 06.01.18
- * Time: 12:51
- */
 
 namespace AppBundle\Controller;
 
@@ -24,7 +18,10 @@ class UserController extends Controller
 {
     public function sendConfirmationEmailMessage(User $user)
     {
-        $transport = new Swift_SmtpTransport($this->getParameter('mailer_transport'), 465, 'ssl');
+        $transport = new Swift_SmtpTransport(
+            $this->getParameter('mailer_transport'),
+            465, 'ssl'
+        );
         $transport->setHost($this->getParameter('mailer_host'));
         $transport->setUsername($this->getParameter('mailer_user'));
         $transport->setPassword($this->getParameter('mailer_password'));
@@ -47,7 +44,9 @@ class UserController extends Controller
 
         $mailer->send($message);
 
-        $this->addFlash('success', 'Mail confirmation has been sent on adress: '.$user->getEmail());
+        $this->addFlash(
+            'success',
+            'Mail confirmation has been sent on adress: '.$user->getEmail());
     }
 
     /**
@@ -113,15 +112,14 @@ class UserController extends Controller
         $userId = $this->getUser();
 
         $em = $this->getDoctrine()->getRepository('AppBundle:User');
-        $user = $em->findOneBy(
-            array("id" => $userId)
-        );
+        $user = $em->findOneBy([
+            "id" => $userId
+        ]);
 
         $form = $this->createForm(UserEditForm::class, $user);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-
             $user = $form->getData();
             $em = $this->getDoctrine()->getManager();
             $em->persist($user);
@@ -159,7 +157,10 @@ class UserController extends Controller
 
             $em->persist($user);
             $em->flush();
-            $this->addFlash('success', 'Password has been changed'.$user->getEmail());
+            $this->addFlash(
+                'success',
+                'Password has been changed'.$user->getEmail()
+            );
 
             return $this->get('security.authentication.guard_handler')
                 ->authenticateUserAndHandleSuccess(

@@ -1,13 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: szymon
- * Date: 04.01.18
- * Time: 16:18
- */
 
 namespace AppBundle\Entity;
-
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;

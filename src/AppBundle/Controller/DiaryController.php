@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: szymon
- * Date: 09.01.18
- * Time: 12:45
- */
 
 namespace AppBundle\Controller;
 
@@ -72,7 +66,10 @@ class DiaryController extends Controller
 
                 $this->addFlash(
                     'success',
-                    sprintf('Diary created, (%s)', $this->getUser()->getEmail())
+                    sprintf(
+                        'Diary created, (%s)',
+                        $this->getUser()->getEmail()
+                    )
                 );
 
                 return $this->redirectToRoute('diary_list');
@@ -85,7 +82,8 @@ class DiaryController extends Controller
 
         $this->addFlash(
             'danger',
-            sprintf('You can make only one entry per day (%s)', $this->getUser()->getEmail())
+            sprintf('You can make only one entry per day (%s)',
+                $this->getUser()->getEmail())
         );
 
         return $this->redirectToRoute('diary_list');
@@ -94,14 +92,17 @@ class DiaryController extends Controller
     /**
      * @Route("/diary/{id}/edit", name="diary_edit")
      */
-    public function editAction($id, Request $request, Diary $diary, FileUploader $fileUploader)
-    {
+    public function editAction($id,
+                               Request $request,
+                               Diary $diary,
+                               FileUploader $fileUploader
+    ) {
         $user = $this->getUser();
         $em = $this->getDoctrine()->getManager();
         $oldDiary = $em->getRepository('AppBundle:Diary')
-            ->findOneBy(
-                array("id" => $id)
-            );
+            ->findOneBy([
+                "id" => $id
+            ]);
 
         $form = $this->createForm(DiaryForm::class, $diary);
         $previousFile = $oldDiary->getAttachment();
@@ -141,9 +142,9 @@ class DiaryController extends Controller
     public function deleteAction($id)
     {
         $em = $this->getDoctrine()->getRepository('AppBundle:Diary');
-        $diary = $em->findOneBy(
-            array("id" => $id)
-        );
+        $diary = $em->findOneBy([
+            "id" => $id
+        ]);
 
         $path = $this->container->getParameter('file_directory');
         $file = $diary->getAttachment();

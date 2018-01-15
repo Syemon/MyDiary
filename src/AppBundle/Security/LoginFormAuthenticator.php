@@ -1,13 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: szymon
- * Date: 05.01.18
- * Time: 10:03
- */
 
 namespace AppBundle\Security;
-
 
 use AppBundle\Form\LoginForm;
 use Doctrine\ORM\EntityManager;

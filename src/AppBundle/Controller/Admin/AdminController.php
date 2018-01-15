@@ -36,17 +36,15 @@ class AdminController extends Controller
      */
     public function showUsersAction()
     {
-        {
-            $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
 
-            $users = $this->getDoctrine()
-                ->getRepository('AppBundle:User')
-                ->findAllDiaries();
+        $users = $this->getDoctrine()
+            ->getRepository('AppBundle:User')
+            ->findAllDiaries();
 
-            return $this->render('admin/users/list.html.twig', array(
-                'users' => $users
-            ));
-        }
+        return $this->render('admin/users/list.html.twig', array(
+            'users' => $users
+        ));
     }
 
     /**
