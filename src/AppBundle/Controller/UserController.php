@@ -14,14 +14,73 @@ use AppBundle\Form\UserEditForm;
 use AppBundle\Form\UserRegistrationForm;
 use Doctrine\ORM\EntityManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Swift_SmtpTransport;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Event\SwitchUserEvent;
-use AppBundle\Service\PasswordEncoder;
 
 class UserController extends Controller
 {
+    public function sendConfirmationEmailMessage(User $user)
+    {
+        $transport = new Swift_SmtpTransport($this->getParameter('mailer_transport'), 465, 'ssl');
+        $transport->setHost($this->getParameter('mailer_host'));
+        $transport->setUsername($this->getParameter('mailer_user'));
+        $transport->setPassword($this->getParameter('mailer_password'));
+
+        $mailer = new \Swift_Mailer($transport);
+
+        $confirmationToken = $user->getConfirmationToken();
+        $subject = "Account activation";
+        $email = $user->getEmail();
+
+        $renderedTemplate = $this->renderView('emails/registration.html.twig', [
+            'user' => $user,
+            'confirmationLink' => '127.0.0.1:8000/activate/'.$confirmationToken
+        ]);
+
+        $message = (new \Swift_Message($subject))
+            ->setFrom($this->getParameter('mailer_user'))
+            ->setTo($email)
+            ->setBody($renderedTemplate,'text/html');
+
+        $mailer->send($message);
+
+        $this->addFlash('success', 'Mail confirmation has been sent on adress: '.$user->getEmail());
+    }
+
+    /**
+     * @Route("/activate/{token}")
+     */
+    public function confirmAction(Request $request, $token)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $user = $em->getRepository('AppBundle:User')
+            ->findOneBy([
+                'confirmationToken' => $token
+            ]);
+
+        if (empty($user)) {
+            $this->createNotFoundException('An account has not been found');
+        }
+
+        $user->setIsActive(true);
+
+        $em->persist($user);
+        $em->flush();
+
+        $this->addFlash('success', 'Welcome '.$user->getNickname().'!');
+
+        return $this->get('security.authentication.guard_handler')
+            ->authenticateUserAndHandleSuccess(
+                $user,
+                $request,
+                $this->get('app.security.login_form_authenticator'),
+                'main '
+            );
+    }
+
     /**
      * @Route("/register", name="user_register")
      */
@@ -33,19 +92,12 @@ class UserController extends Controller
         if ($form->isValid()) {
             /** @var User $user */
             $user = $form->getData();
+            $user->setConfirmationToken(bin2hex(random_bytes(10)));
+            $this->sendConfirmationEmailMessage($user);
+
             $em = $this->getDoctrine()->getManager();
             $em->persist($user);
             $em->flush();
-
-            $this->addFlash('success', 'Welcome'.$user->getEmail());
-
-            return $this->get('security.authentication.guard_handler')
-                ->authenticateUserAndHandleSuccess(
-                    $user,
-                    $request,
-                    $this->get('app.security.login_form_authenticator'),
-                    'main '
-                );
         }
 
         return $this->render('user/register.html.twig', [

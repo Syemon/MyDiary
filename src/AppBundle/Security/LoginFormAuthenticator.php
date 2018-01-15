@@ -71,8 +71,13 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
     public function checkCredentials($credentials, UserInterface $user)
     {
         $password = $credentials['_password'];
+        $username = $user->getUsername();
+        $userObj = $this->em->getRepository('AppBundle:User')
+            ->findOneBy(['phoneNumber' => $username]);
 
-        if ($this->passwordEncoder->isPasswordValid($user, $password)) {
+        $isActive = $userObj->getIsActive();
+
+        if ($this->passwordEncoder->isPasswordValid($user, $password) && $isActive == true) {
             return true;
         }
 
@@ -86,7 +91,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 
     protected function getDefaultSuccessRedirectUrl()
     {
-        return $this->router->generate('homepage');
+        return $this->router->generate('diary_list');
     }
 
 
