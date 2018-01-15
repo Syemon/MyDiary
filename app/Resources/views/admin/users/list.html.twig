@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <h1>Diaries</h1>
+
+                <table class="table table-striped">
+                    <tr>
+                        <th>Nick</th>
+                        <th>E-mail</th>
+                        <th>Phone number</th>
+                        <th>Account status</th>
+                        <th>Delete</th>
+                    </tr>
+                    {% for user in users %}
+                        <tr>
+                            <td>{{ user.nickname}}</td>
+                            <td>{{ user.email }}</td>
+                            <td>{{ user.phonenumber }}</td>
+                            {% if user.isActive == 1 %}
+                                <td>Active</td>
+                            {% elseif user.isActive == 0 %}
+                                <td>Needs e-mail confirmation</td>
+                            {% endif %}
+                            <td>
+                                <a href="{{ path('admin_user_delete', {'id': user.id}) }}" class="btn btn-xs btn-danger"><span class="fa fa-trash"></span></a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
