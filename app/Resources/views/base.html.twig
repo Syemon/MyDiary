@@ -13,10 +13,16 @@
     </head>
     <body>
         <header class="header">
-            <img class="logo-icon" src="{{ asset('images/aquanote-logo.png') }}">
+            <img class="logo-icon" src="{{ asset('images/diary.png') }}">
             <h1 class="logo">MyDiary</h1>
             <ul class="navi">
-                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                {% if is_granted('ROLE_ADMIN') %}
+                    <li><a href="{{ path('diary_list') }}">Diary</a></li>
+                    <li><a href="{{ path('admin_diaries_list') }}">Admin</a></li>
+                    <li><a href="{{ path('user_edit') }}">Edit</a></li>
+                    <li><a href="{{ path('security_logout') }}">Logout</a></li>
+                {% elseif is_granted('IS_AUTHENTICATED_FULLY') %}
+                    <li><a href="{{ path('diary_list') }}">Diary</a></li>
                     <li><a href="{{ path('user_edit') }}">Edit</a></li>
                     <li><a href="{{ path('security_logout') }}">Logout</a></li>
                 {% else %}
@@ -43,6 +49,8 @@
 
         <div class="footer">
             <p class="footer-text"></p>
+            <div>Icons made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
+
         </div>
 
         {% block javascripts %}
