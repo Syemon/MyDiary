@@ -1,6 +1,6 @@
 AppBundle\Entity\User:
     user_{1..10}:
-        nickName: <lastName()>
+        nickName: admin<current()>
         phoneNumber: 11111111<current()>
         email: fakemail<current()>@gmail.com
         plainPassword: iliketurtles
