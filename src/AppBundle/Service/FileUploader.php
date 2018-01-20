@@ -4,6 +4,9 @@ namespace AppBundle\Service;
 
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
+/**
+ * Uploads file on the given catalog
+ */
 class FileUploader
 {
     private $targetDir;

@@ -11,6 +11,8 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 class SecurityController extends Controller
 {
     /**
+     * Login authentication
+     *
      * @Route("/login", name="security_login")
      */
     public function loginAction(Request $request)
@@ -38,6 +40,8 @@ class SecurityController extends Controller
     }
 
     /**
+     * Allows to logout
+     *
      * @Route("/logout", name="security_logout")
      */
     public function logoutAction()

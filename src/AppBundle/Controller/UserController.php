@@ -16,6 +16,9 @@ use Symfony\Component\Security\Http\Event\SwitchUserEvent;
 
 class UserController extends Controller
 {
+    /**
+     * Sends an email with authorization token
+     */
     public function sendConfirmationEmailMessage(User $user)
     {
         $transport = new Swift_SmtpTransport(
@@ -50,6 +53,10 @@ class UserController extends Controller
     }
 
     /**
+     * Confirms user account
+     *
+     * Confirmation was sent in email via sendConfirmationEmailMessage()
+     *
      * @Route("/activate/{token}")
      */
     public function confirmAction(Request $request, $token)
@@ -81,6 +88,12 @@ class UserController extends Controller
     }
 
     /**
+     * Registers a new user
+     *
+     * Registration has two steps:
+     * - registration via form
+     * - confirming email adress from recieved message (sendConfirmationEmailMessage())
+     *
      * @Route("/register", name="user_register")
      */
     public function registerAction(Request $request)
@@ -105,6 +118,10 @@ class UserController extends Controller
     }
 
     /**
+     * Edits user data (except of a password)
+     *
+     * All the user entries will be deleted from the database
+     *
      * @Route("/edit", name="user_edit")
      */
     public function editAction(Request $request)
@@ -132,6 +149,8 @@ class UserController extends Controller
         ]);
     }
     /**
+     * Changes user password
+     *
      * @Route("/changePassword", name="user_change_password")
      */
     public function changePasswordAction(Request $request)

@@ -14,6 +14,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 class AdminController extends Controller
 {
     /**
+     * Shows all the diaries and users
+     *
      * @Route("/diaries", name="admin_diaries_list")
      */
     public function indexAction()
@@ -32,6 +34,8 @@ class AdminController extends Controller
     }
 
     /**
+     * Shows all the users
+     *
      * @Route("/users", name="admin_users_list")
      */
     public function showUsersAction()
@@ -48,6 +52,8 @@ class AdminController extends Controller
     }
 
     /**
+     * Deletes a user
+     *
      * @Route("/users/{id}/delete", name="admin_user_delete")
      */
     public function deleteAction($id)
@@ -69,6 +75,8 @@ class AdminController extends Controller
         return $this->redirectToRoute('admin_users_list');
     }
     /**
+     * Shows diaries from the specific user
+     *
      * @Route("/users/{id}/diary", name="admin_user_diary")
      */
     public function showUserDiaryAction($id)

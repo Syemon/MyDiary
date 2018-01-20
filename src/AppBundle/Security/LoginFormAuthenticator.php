@@ -16,6 +16,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Guard\Authenticator\AbstractFormLoginAuthenticator;
 
+/**
+ * Checks if user data is valid and saves user session
+ */
 class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 {
     private $formFactory;

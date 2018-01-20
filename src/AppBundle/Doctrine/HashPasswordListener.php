@@ -7,6 +7,13 @@ use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
+/**
+ * A listener who encodes a password
+ *
+ * looks for any change in the plainPassword value
+ * if there is any than it encodes a value from the plainPassword and saves it in the password variable
+ * So far it works only during registration.
+ */
 class HashPasswordListener implements EventSubscriber
 {
     private $passwordEncoder;
@@ -35,7 +42,6 @@ class HashPasswordListener implements EventSubscriber
 
         $this->encodePassword($entity);
 
-        // necessary to force the update to see the change
         $em = $args->getEntityManager();
         $meta = $em->getClassMetadata(get_class($entity));
         $em->getUnitOfWork()->recomputeSingleEntityChangeSet($meta, $entity);
