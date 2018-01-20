@@ -75,6 +75,9 @@ swiftmailer:
     username: '%mailer_user%'
     password: '%mailer_password%'
     spool: { type: memory }
+    antiflood:
+        threshold: 15
+        sleep: 60
 
 doctrine_cache:
     providers:
