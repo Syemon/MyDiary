@@ -1,0 +1,24 @@
+body {
+
+}
+
+.table-bordered {
+    background-color: #0f0f0f !important;;
+}
+
+.header {
+    padding: 10px 0;
+    margin: 0 auto;
+    background-color: #bec6e2 !important;
+}
+
+.logo-icon {
+    height: 50px;
+    width: auto;
+    margin-top: 12px;
+}
+
+.diary-picture {
+    width:100% !important;
+    max-width: 200px !important;;
+}
