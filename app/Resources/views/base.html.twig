@@ -13,7 +13,11 @@
     </head>
     <body>
         <header class="header">
-            <img class="logo-icon" src="{{ asset('images/diary.png') }}">
+            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                <a href="{{ path('diary_list') }}"><img class="logo-icon" src="{{ asset('images/diary.png') }}"></a>
+            {% else %}
+                <a href="{{ path('main_page') }}"><img class="logo-icon" src="{{ asset('images/diary.png') }}"></a>
+            {% endif %}
             <h1 class="logo">MyDiary</h1>
             <ul class="navi">
                 {% if is_granted('ROLE_ADMIN') %}
@@ -55,7 +59,6 @@
         </div>
 
         {% block javascripts %}
-            <script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
         {% endblock %}
     </body>
 </html>
