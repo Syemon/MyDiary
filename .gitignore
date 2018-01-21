@@ -15,7 +15,10 @@
 !var/SymfonyRequirements.php
 /vendor/
 /web/bundles/
-/app/web/uploads/files/
-/app/web/created/pdfs/
+/app/web/uploads/files/*.pdf
+/app/web/uploads/files/*.png
+/app/web/uploads/files/*.jpeg
+/app/web/uploads/files/*.jpg
+/app/web/created/pdfs/*.pdf
 /app/DoctrineMigrations/
 *.idea*
