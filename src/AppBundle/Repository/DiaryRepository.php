@@ -2,11 +2,8 @@
 
 namespace AppBundle\Repository;
 
-use AppBundle\Entity\Diary;
 use AppBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
-use AppBundle\Controller\UserController;
-use Doctrine\DBAL\Connection;
 
 class DiaryRepository extends EntityRepository
 {

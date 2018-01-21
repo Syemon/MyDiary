@@ -6,13 +6,10 @@ use AppBundle\Entity\User;
 use AppBundle\Form\UserChangePasswordForm;
 use AppBundle\Form\UserEditForm;
 use AppBundle\Form\UserRegistrationForm;
-use Doctrine\ORM\EntityManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Swift_SmtpTransport;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Http\Event\SwitchUserEvent;
 
 class UserController extends Controller
 {

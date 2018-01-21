@@ -7,7 +7,6 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-use AppBundle\Entity\Diary;
 
 /**
  * @ORM\Entity(repositoryClass="AppBundle\Repository\DiaryRepository")
