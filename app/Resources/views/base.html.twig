@@ -16,7 +16,7 @@
             {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                 <a href="{{ path('diary_list') }}"><img class="logo-icon" src="{{ asset('images/diary.png') }}"></a>
             {% else %}
-                <a href="{{ path('main_page') }}"><img class="logo-icon" src="{{ asset('images/diary.png') }}"></a>
+                <a href="{{ path('homepage') }}"><img class="logo-icon" src="{{ asset('images/diary.png') }}"></a>
             {% endif %}
             <h1 class="logo">MyDiary</h1>
             <ul class="navi">
