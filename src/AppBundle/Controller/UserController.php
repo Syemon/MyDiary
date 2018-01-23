@@ -97,11 +97,11 @@ class UserController extends Controller
             /** @var User $user */
             $user = $form->getData();
             $user->setConfirmationToken(bin2hex(random_bytes(10)));
-            $this->sendConfirmationEmailMessage($user);
-
             $em = $this->getDoctrine()->getManager();
             $em->persist($user);
             $em->flush();
+
+            $this->sendConfirmationEmailMessage($user);
         }
 
         return $this->render('user/register.html.twig', [
