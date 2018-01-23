@@ -7,5 +7,90 @@ homepage:
     defaults:
         _controller: AppBundle:Main:homepage
 
-logout:
+security_login:
+    path: /login
+    defaults:
+        _controller: AppBundle:Security:login
+
+security_logout:
     path: /logout
+    defaults:
+        _controller: AppBundle:Security:logout
+
+confirm_email:
+    path: /activate/{token}
+    defaults:
+        _controller: AppBundle:User:confirm
+
+user_register:
+    path: /register
+    defaults:
+        _controller: AppBundle:User:register
+
+user_edit:
+    path: /edit
+    defaults:
+        _controller: AppBundle:User:edit
+
+user_change_password:
+    path: /changePassword
+    defaults:
+        _controller: AppBundle:User:changePassword
+
+diary_list:
+    path: /diary
+    defaults:
+        _controller: AppBundle:Diary:list
+
+diary_new:
+    path: /diary/new
+    defaults:
+        _controller: AppBundle:Diary:new
+
+diary_edit:
+    path: /diary/{id}/edit
+    defaults:
+        _controller: AppBundle:Diary:edit
+
+diary_delete:
+    path: /diary/{id}/delete
+    defaults:
+        _controller: AppBundle:Diary:delete
+
+get_attachment:
+    path: /uploads/files/{file}
+    defaults:
+        _controller: AppBundle:Diary:getFiles
+    methods: [GET]
+
+diary_to_pdf:
+    path: /diary/{id}/pdf
+    defaults:
+        _controller: AppBundle:Diary:createDiaryPdf
+    methods: [GET]
+
+diaries_to_pdf:
+    path: /diaries/{id}/pdf
+    defaults:
+        _controller: AppBundle:Diary:createDiariesPdf
+    methods: [GET]
+
+admin_diaries_list:
+    path: /admin/diaries
+    defaults:
+        _controller: AppBundle:Admin\Admin:index
+
+admin_users_list:
+    path: /admin/users
+    defaults:
+        _controller: AppBundle:Admin\Admin:showUsers
+
+admin_user_delete:
+    path: /admin/users/{id}/delete
+    defaults:
+        _controller: AppBundle:Admin\Admin:delete
+
+admin_user_diary:
+    path: /admin/users/{id}/diary
+    defaults:
+        _controller: AppBundle:Admin\Admin:showUserDiary

@@ -4,9 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Diary;
 use AppBundle\Form\DiaryForm;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,8 +14,6 @@ class DiaryController extends Controller
 {
     /**
      * Shows all the diaries of the logged user
-     *
-     * @Route("/diary", name="diary_list")
      */
     public function listAction()
     {
@@ -38,8 +34,6 @@ class DiaryController extends Controller
      * Creates new diary entry
      *
      * User can't make more than 1 entry per day
-     *
-     * @Route("/diary/new", name="diary_new")
      */
     public function newAction(Request $request, FileUploader $fileUploader)
     {
@@ -96,8 +90,6 @@ class DiaryController extends Controller
      * Edits specific entry
      *
      * If user replaces an attachment, than old one will be erased.
-     *
-     * @Route("/diary/{id}/edit", name="diary_edit")
      */
     public function editAction($id,
                                Request $request,
@@ -148,8 +140,6 @@ class DiaryController extends Controller
 
     /**
      * Deletes specific entry
-     *
-     * @Route("/diary/{id}/delete", name="diary_delete")
      */
     public function deleteAction($id)
     {
@@ -178,11 +168,8 @@ class DiaryController extends Controller
 
     /**
      * Allows to see an attachment in the table
-     *
-     * @Route("/uploads/files/{file}")
-     * @Method("GET")
      */
-    public function getFiles($file)
+    public function getFilesAction($file)
     {
         $path = $this ->container->getParameter('file_directory');
         return new BinaryFileResponse("$path/$file");
@@ -190,9 +177,6 @@ class DiaryController extends Controller
 
     /**
      * Creates a pdf file based on a one specific entry
-     *
-     * @Route("/diary/{id}/pdf", name="diary_to_pdf")
-     * @Method("GET")
      */
     public function createDiaryPdfAction($id)
     {
@@ -217,9 +201,6 @@ class DiaryController extends Controller
 
     /**
      * Create a pdf file of all the user diaries
-     *
-     * @Route("/diaries/{id}/pdf", name="diaries_to_pdf")
-     * @Method("GET")
      */
     public function createDiariesPdfAction($id)
     {

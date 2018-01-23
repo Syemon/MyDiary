@@ -6,7 +6,6 @@ use AppBundle\Entity\User;
 use AppBundle\Form\UserChangePasswordForm;
 use AppBundle\Form\UserEditForm;
 use AppBundle\Form\UserRegistrationForm;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Swift_SmtpTransport;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -53,8 +52,6 @@ class UserController extends Controller
      * Confirms user account
      *
      * Confirmation was sent in email via sendConfirmationEmailMessage()
-     *
-     * @Route("/activate/{token}")
      */
     public function confirmAction(Request $request, $token)
     {
@@ -90,8 +87,6 @@ class UserController extends Controller
      * Registration has two steps:
      * - registration via form
      * - confirming email adress from recieved message (sendConfirmationEmailMessage())
-     *
-     * @Route("/register", name="user_register")
      */
     public function registerAction(Request $request)
     {
@@ -118,8 +113,6 @@ class UserController extends Controller
      * Edits user data (except of a password)
      *
      * All the user entries will be deleted from the database
-     *
-     * @Route("/edit", name="user_edit")
      */
     public function editAction(Request $request)
     {
@@ -147,8 +140,6 @@ class UserController extends Controller
     }
     /**
      * Changes user password
-     *
-     * @Route("/changePassword", name="user_change_password")
      */
     public function changePasswordAction(Request $request)
     {
