@@ -3,7 +3,7 @@ AppBundle\Entity\User:
         nickName: admin<current()>
         phoneNumber: 11111111<current()>
         email: fakemail<current()>@gmail.com
-        plainPassword: iliketurtles
+        plainPassword: qwerty123
         roles: ['ROLE_ADMIN']
         isActive: true
 
