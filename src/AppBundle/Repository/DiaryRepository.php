@@ -37,13 +37,13 @@ class DiaryRepository extends EntityRepository
     /**
      * @param User $user
      * @return User[]
+     * @throws \Exception
      */
     public function findIfDiaryExists(User $user)
     {
         $date = new \DateTime('now');
         $date->setTime(0,0,0);
 
-        dump($date);
         return $this->createQueryBuilder('user')
             ->select('user_diary.createdAt')
             ->andWhere('user_diary.user = :user_id' )
