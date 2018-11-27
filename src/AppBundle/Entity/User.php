@@ -43,7 +43,7 @@ class User implements UserInterface
 
     /**
      * @Assert\NotBlank()
-     * @ORM\Column(type="string", unique=true)
+     * @ORM\Column(type="string", unique=false)
      */
     private $nickname;
 
