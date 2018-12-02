@@ -3,7 +3,6 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="AppBundle\Repository\DiaryRepository")
@@ -27,13 +26,11 @@ class Diary
 
     /**
      * @ORM\Column(type="text")
-     * @Assert\NotBlank()
      */
     private $note;
 
     /**
      * @ORM\Column(type="string", nullable=true)
-     * @Assert\File(mimeTypes={ "application/pdf", "image/png", "image/jpeg" })
      */
     private $attachment;
 
@@ -44,7 +41,6 @@ class Diary
 
     /**
      * @ORM\Column(type="string")
-     * @Assert\NotBlank()
      */
     private $title;
 

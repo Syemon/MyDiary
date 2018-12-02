@@ -3,15 +3,12 @@
 namespace AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Entity(repositoryClass="AppBundle\Repository\DiaryRepository")
+ * @ORM\Entity
  * @ORM\Table(name="user")
- * @UniqueEntity(fields={"email", "phoneNumber"}, message="You already have an account")
  */
 class User implements UserInterface
 {
@@ -24,7 +21,6 @@ class User implements UserInterface
 
     /**
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Diary", mappedBy="user")
-     * @Assert\NotBlank()
      * @ORM\OrderBy({"createdAt" = "DESC"})
      */
     private $diary;
@@ -35,21 +31,16 @@ class User implements UserInterface
     }
 
     /**
-     * @Assert\NotBlank()
-     * @Assert\Email()
      * @ORM\Column(type="string", unique=true)
      */
     private $email;
 
     /**
-     * @Assert\NotBlank()
      * @ORM\Column(type="string", unique=false)
      */
     private $nickname;
 
     /**
-     * @Assert\NotBlank()
-     * @Assert\Regex(pattern="/^[0-9]*$/", message="Phone number should look like: 111222333")
      * @ORM\Column(type="string", unique=true)
      */
     private $phoneNumber;
@@ -59,9 +50,6 @@ class User implements UserInterface
      */
     private $password;
 
-    /**
-     * @Assert\NotBlank(groups={"Registration"})
-     */
     private $plainPassword;
 
     /**

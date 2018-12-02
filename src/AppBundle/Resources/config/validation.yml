@@ -1,0 +1,31 @@
+AppBundle\Entity\User:
+  constraints:
+    - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
+        fields: ["email", "phoneNumber"]
+        message: "You already have an account"
+  properties:
+    diary:
+      - NotBlank: ~
+    email:
+      - NotBlank: ~
+      - Email: ~
+    nickname:
+      - NotBlank: ~
+    phoneNumber:
+      - NotBlank: ~
+      - Regex:
+          pattern: "/^[0-9]*$/"
+          message: "Phone number should look like: 111222333"
+    plainPassword:
+      - NotBlank:
+          groups: ["Registration"]
+
+AppBundle\Entity\Diary:
+  properties:
+    note:
+      - NotBlank: ~
+    attachment:
+      - File:
+          mimeTypes: ["application/pdf", "image/png", "image/jpeg"]
+    title:
+      - NotBlank: ~
