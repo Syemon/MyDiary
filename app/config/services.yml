@@ -40,6 +40,10 @@ services:
         arguments:
             $targetDir: '%file_directory%'
 
+    AppBundle\Service\DiaryHelper:
+        arguments:
+            $targetDir: '%file_directory%'
+
     app.security.login_form_authenticator:
         class: AppBundle\Security\LoginFormAuthenticator
 
