@@ -70,7 +70,7 @@ diary_to_pdf:
     methods: [GET]
 
 diaries_to_pdf:
-    path: /diaries/{id}/pdf
+    path: /diaries/pdf
     defaults:
         _controller: AppBundle:Diary:createDiariesPdf
     methods: [GET]

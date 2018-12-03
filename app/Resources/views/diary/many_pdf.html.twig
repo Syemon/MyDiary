@@ -10,18 +10,16 @@
     <header class="header">
         <h1><img class="logo-icon" src="{{ base_dir ~ '/../web/images/diary.png' }}"> MyDiary</h1>
     </header>
-    {% for user in diaries %}
-    {% for diary in user.diary %}
+    {% for diary in diaries %}
     <ul><h3><strong>{{ diary.title }}</strong></h3><p> {{ diary.createdAt|date("m/d/Y") }}</p></ul>
     {% if diary.attachment is not empty %}
         {% if diary.attachment ends with '.pdf' %}
-            <ul><embed src="{{ base_dir ~ '/web/uploads/files/' ~ diary.attachment }}"></ul>
+            <ul><embed src="{{ base_dir ~ '/../web/uploads/files/' ~ diary.attachment }}"></ul>
         {% else %}
-            <ul><img class="diary-picture" src="{{ base_dir ~ '/web/uploads/files/' ~ diary.attachment }}"></ul>
+            <ul><img class="diary-picture" src="{{ base_dir ~ '/../web/uploads/files/' ~ diary.attachment }}"></ul>
         {% endif %}
     {% endif %}
     <ul>{{ diary.note }}</ul>
-    {% endfor %}
     {% endfor %}
 </div>
 </body>

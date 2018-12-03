@@ -4,25 +4,19 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Diary;
 use AppBundle\Form\DiaryForm;
+use AppBundle\Service\DiaryHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
-use AppBundle\Service\FileUploader;
 
 class DiaryController extends Controller
 {
-    /**
-     * Shows all the diaries of the logged user
-     */
     public function listAction()
     {
-        $user = $this->get('security.token_storage')
-            ->getToken()
-            ->getUser();
+        $user = $this->getUser();
 
         $em = $this->getDoctrine()->getManager();
-        $diaries = $em->getRepository('AppBundle:User')
+        $diaries = $em->getRepository(Diary::class)
             ->findAllUserDiaries($user);
 
         return $this->render('diary/list.html.twig', [
@@ -34,30 +28,25 @@ class DiaryController extends Controller
      * Creates new diary entry
      *
      * User can't make more than 1 entry per day
+     *
+     * @param Request $request
+     * @param DiaryHelper $diaryHelper
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
-    public function newAction(Request $request, FileUploader $fileUploader)
+    public function newAction(Request $request, DiaryHelper $diaryHelper)
     {
         $user = $this ->getUser();
-
         $em = $this->getDoctrine()->getManager();
-        $diaryCheck = $em->getRepository('AppBundle:User')
-            ->findIfDiaryExists($user);
 
-        if (empty($diaryCheck)) {
+        if (!$diaryHelper->userHasSubmittedDiary($user)) {
             $form = $this->createForm(DiaryForm::class);
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
                 $diary = $form->getData();
                 $diary->setUser($user);
-                $file = $diary->getAttachment();
+                $diaryHelper->addAttachment($diary);
 
-                if ($file!=null) {
-                    $fileName = $fileUploader->upload($file);
-                    $diary->setAttachment($fileName);
-                }
-
-                $em = $this->getDoctrine()->getManager();
                 $em->persist($diary);
                 $em->flush();
 
@@ -90,41 +79,28 @@ class DiaryController extends Controller
      * Edits specific entry
      *
      * If user replaces an attachment, than old one will be erased.
+     *
+     * @param $id
+     * @param Request $request
+     * @param Diary $diary
+     * @param DiaryHelper $diaryHelper
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
     public function editAction($id,
                                Request $request,
                                Diary $diary,
-                               FileUploader $fileUploader
+                               DiaryHelper $diaryHelper
     ) {
-        $user = $this->getUser();
         $em = $this->getDoctrine()->getManager();
-        $oldDiary = $em->getRepository('AppBundle:Diary')
-            ->findOneBy([
-                "id" => $id
-            ]);
 
         $form = $this->createForm(DiaryForm::class, $diary);
-        $previousFile = $oldDiary->getAttachment();
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $diary = $form->getData();
-            //$diary->setUser($user);
-            $file = $diary->getAttachment();
+            $diaryHelper->removePreviousAttachment($diary);
+            $diaryHelper->addAttachment($diary);
 
-            // Upload only if attachment is not null and delete old file
-            if ($file!=null) {
-                $fileName = $fileUploader->upload($file);
-                $diary->setAttachment($fileName);
-                $path = $this->container->getParameter('file_directory');
-                $filesystem = new Filesystem();
-                if ($previousFile != null)
-                {
-                    $filesystem->remove($path.'/'.$previousFile);
-                }
-            }
-
-            $em = $this->getDoctrine()->getManager();
             $em->persist($diary);
             $em->flush();
 
@@ -139,24 +115,18 @@ class DiaryController extends Controller
     }
 
     /**
-     * Deletes specific entry
+     * @param $id
+     * @param DiaryHelper $diaryHelper
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function deleteAction($id)
+    public function deleteAction($id, DiaryHelper $diaryHelper)
     {
-        $em = $this->getDoctrine()->getRepository('AppBundle:Diary');
-        $diary = $em->findOneBy([
-            "id" => $id
-        ]);
-
-        $path = $this->container->getParameter('file_directory');
-        $file = $diary->getAttachment();
-
         $em = $this->getDoctrine()->getManager();
+        $diary = $em->getRepository(Diary::class)->find($id);
+        $diaryHelper->removePreviousAttachment($diary);
+
         $em->remove($diary);
         $em->flush();
-
-        $filesystem = new Filesystem();
-        $filesystem->remove("$path/$file");
 
         $this->addFlash(
             'success',
@@ -167,7 +137,8 @@ class DiaryController extends Controller
     }
 
     /**
-     * Allows to see an attachment in the table
+     * @param $file
+     * @return BinaryFileResponse
      */
     public function getFilesAction($file)
     {
@@ -176,17 +147,16 @@ class DiaryController extends Controller
     }
 
     /**
-     * Creates a pdf file based on a one specific entry
+     * @param $id
+     * @return BinaryFileResponse
+     * @throws \Exception
      */
     public function createDiaryPdfAction($id)
     {
         $path = $this->container->getParameter('pdf_directory');
         $file = bin2hex(random_bytes(10)).'.pdf';
 
-        $em = $this->getDoctrine()->getRepository('AppBundle:Diary');
-        $diary = $em->findOneBy([
-            "id" => $id
-        ]);
+        $diary = $this->getDoctrine()->getRepository(Diary::class)->find($id);
 
         $this->get('knp_snappy.pdf')->generateFromHtml(
             $this->renderView('diary/pdf.html.twig', [
@@ -199,20 +169,13 @@ class DiaryController extends Controller
         return new BinaryFileResponse($path.'/'.$file);
     }
 
-    /**
-     * Create a pdf file of all the user diaries
-     */
-    public function createDiariesPdfAction($id)
+    public function createDiariesPdfAction()
     {
+        $user = $this->getUser();
         $path = $this->container->getParameter('pdf_directory');
         $file = bin2hex(random_bytes(10)).'.pdf';
 
-        $em = $this->getDoctrine()->getRepository('AppBundle:User');
-        $user = $em->findOneBy([
-            "id" => $id
-        ]);
-
-        $em = $this->getDoctrine()->getRepository('AppBundle:User');
+        $em = $this->getDoctrine()->getRepository(Diary::class);
         $diary = $em->findAllUserDiaries($user);
 
         $this->get('knp_snappy.pdf')->generateFromHtml(

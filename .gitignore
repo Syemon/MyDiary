@@ -15,10 +15,10 @@
 !var/SymfonyRequirements.php
 /vendor/
 /web/bundles/
-/app/web/uploads/files/*.pdf
-/app/web/uploads/files/*.png
-/app/web/uploads/files/*.jpeg
-/app/web/uploads/files/*.jpg
-/app/web/created/pdfs/*.pdf
+/web/uploads/files/*.pdf
+/web/uploads/files/*.png
+/web/uploads/files/*.jpeg
+/web/uploads/files/*.jpg
+/web/created/pdfs/*.pdf
 /app/DoctrineMigrations/
 *.idea*
