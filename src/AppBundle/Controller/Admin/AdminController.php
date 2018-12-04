@@ -2,6 +2,8 @@
 
 namespace AppBundle\Controller\Admin;
 
+use AppBundle\Entity\Diary;
+use AppBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class AdminController extends Controller
@@ -61,21 +63,21 @@ class AdminController extends Controller
 
         return $this->redirectToRoute('admin_users_list');
     }
+
     /**
-     * Shows diaries from the specific user
+     * @param integer $id
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function showUserDiaryAction($id)
     {
-        $em = $this->getDoctrine()->getRepository('AppBundle:User');
-        $user = $em->findOneBy([
-            "id" => $id
-        ]);
+        $em =  $this->getDoctrine()->getManager();
+        $user = $em->getRepository(User::class)->find($id);
 
-        $diaries = $em
-            ->findAllUserDiaries($user);
+        $diaries = $em->getRepository(Diary::class)->findAllUserDiaries($user);
 
         return $this->render('diary/list.html.twig', [
             'diaries' => $diaries,
+            'user' => $user
         ]);
     }
 }
