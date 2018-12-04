@@ -9,50 +9,42 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 class AdminController extends Controller
 {
     /**
-     * Shows all the diaries and users
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function indexAction()
     {
-        {
-            $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        $users = $this->getDoctrine()
+            ->getRepository(User::class)
+            ->findAllDiaries();
 
-            $users = $this->getDoctrine()
-                ->getRepository('AppBundle:User')
-                ->findAllDiaries();
-
-            return $this->render('admin/diary/list.html.twig', array(
-                'users' => $users
-            ));
-        }
+        return $this->render('admin/diary/list.html.twig', [
+            'users' => $users
+        ]);
     }
 
     /**
-     * Shows all the users
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function showUsersAction()
     {
-        $this->denyAccessUnlessGranted('ROLE_ADMIN');
-
         $users = $this->getDoctrine()
-            ->getRepository('AppBundle:User')
+            ->getRepository(User::class)
             ->findAllDiaries();
 
-        return $this->render('admin/users/list.html.twig', array(
+        return $this->render('admin/users/list.html.twig', [
             'users' => $users
-        ));
+        ]);
     }
 
     /**
-     * Deletes a user
+     * @param integer $id
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function deleteAction($id)
     {
-        $em = $this->getDoctrine()->getRepository('AppBundle:User');
-        $user = $em->findOneBy([
-            "id" => $id
-        ]);
-
         $em = $this->getDoctrine()->getManager();
+        $user = $em->getRepository(User::class)->find($id);
+
         $em->remove($user);
         $em->flush();
 
