@@ -36,6 +36,10 @@ framework:
     templating:
         engines: ['twig']
 
+sensio_framework_extra:
+    router:
+        annotations: false
+
 # Twig Configuration
 twig:
     debug: '%kernel.debug%'
