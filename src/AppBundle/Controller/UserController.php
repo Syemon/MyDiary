@@ -104,7 +104,7 @@ class UserController extends Controller
         $form = $this->createForm(UserRegistrationForm::class);
 
         $form->handleRequest($request);
-        if ($form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             /** @var User $user */
             $user = $form->getData();
             $user->setConfirmationToken(bin2hex(random_bytes(10)));
