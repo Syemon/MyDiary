@@ -10,6 +10,7 @@ parameters:
     cache_type: file_system
     file_directory: '%kernel.root_dir%/../web/uploads/files'
     pdf_directory: '%kernel.root_dir%/../web/created/pdfs'
+    container.autowiring.strict_mode: true
 
 framework:
     #esi: ~

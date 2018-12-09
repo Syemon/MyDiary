@@ -11,6 +11,9 @@ use Symfony\Component\HttpFoundation\Request;
 
 class DiaryController extends Controller
 {
+    /**
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function listAction()
     {
         $user = $this->getUser();
@@ -25,8 +28,6 @@ class DiaryController extends Controller
     }
 
     /**
-     * Creates new diary entry
-     *
      * User can't make more than 1 entry per day
      *
      * @param Request $request
@@ -76,10 +77,6 @@ class DiaryController extends Controller
     }
 
     /**
-     * Edits specific entry
-     *
-     * If user replaces an attachment, than old one will be erased.
-     *
      * @param $id
      * @param Request $request
      * @param Diary $diary
@@ -169,6 +166,10 @@ class DiaryController extends Controller
         return new BinaryFileResponse($path.'/'.$file);
     }
 
+    /**
+     * @return BinaryFileResponse
+     * @throws \Exception
+     */
     public function createDiariesPdfAction()
     {
         $user = $this->getUser();

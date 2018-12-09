@@ -4,18 +4,23 @@ namespace AppBundle\Service;
 
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-/**
- * Uploads file on the given catalog
- */
 class FileUploader
 {
     private $targetDir;
 
+    /**
+     * FileUploader constructor.
+     * @param string $targetDir
+     */
     public function __construct($targetDir)
     {
         $this->targetDir = $targetDir;
     }
 
+    /**
+     * @param UploadedFile $file
+     * @return string
+     */
     public function upload(UploadedFile $file)
     {
         $fileName = md5(uniqid()).'.'.$file->guessExtension();
@@ -25,6 +30,9 @@ class FileUploader
         return $fileName;
     }
 
+    /**
+     * @return string
+     */
     public function getTargetDir()
     {
         return $this->targetDir;

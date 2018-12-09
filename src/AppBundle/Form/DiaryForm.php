@@ -11,6 +11,10 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class DiaryForm extends AbstractType
 {
+    /**
+     * @param FormBuilderInterface $builder
+     * @param array $options
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
 
@@ -28,6 +32,9 @@ class DiaryForm extends AbstractType
             ));
     }
 
+    /**
+     * @param OptionsResolver $resolver
+     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
@@ -35,6 +42,9 @@ class DiaryForm extends AbstractType
         ]);
     }
 
+    /**
+     * @return string|null
+     */
     public function getBlockPrefix()
     {
         return 'app_bundle_diary_form';

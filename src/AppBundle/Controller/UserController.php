@@ -6,14 +6,18 @@ use AppBundle\Entity\User;
 use AppBundle\Form\UserChangePasswordForm;
 use AppBundle\Form\UserEditForm;
 use AppBundle\Form\UserRegistrationForm;
+use AppBundle\Security\LoginFormAuthenticator;
 use Swift_SmtpTransport;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Security\Core\Tests\Encoder\PasswordEncoder;
+use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 
 class UserController extends Controller
 {
     /**
-     * Sends an email with authorization token
+     * @param User $user
      */
     public function sendConfirmationEmailMessage(User $user)
     {
@@ -49,13 +53,21 @@ class UserController extends Controller
     }
 
     /**
-     * Confirms user account
-     *
-     * Confirmation was sent in email via sendConfirmationEmailMessage()
+     * @param Request $request
+     * @param string $token
+     * @param GuardAuthenticatorHandler $guardAuthenticatorHandler
+     * @param LoginFormAuthenticator $loginFormAuthenticator
+     * @return \Symfony\Component\HttpFoundation\Response|null
      */
-    public function confirmAction(Request $request, $token)
+    public function confirmAction(
+        Request $request,
+        $token,
+        GuardAuthenticatorHandler $guardAuthenticatorHandler,
+        LoginFormAuthenticator $loginFormAuthenticator)
     {
         $em = $this->getDoctrine()->getManager();
+
+        /** @var User $user */
         $user = $em->getRepository('AppBundle:User')
             ->findOneBy([
                 'confirmationToken' => $token
@@ -72,24 +84,23 @@ class UserController extends Controller
 
         $this->addFlash('success', 'Welcome '.$user->getNickname().'!');
 
-        return $this->get('security.authentication.guard_handler')
+        return $guardAuthenticatorHandler
             ->authenticateUserAndHandleSuccess(
                 $user,
                 $request,
-                $this->get('app.security.login_form_authenticator'),
+                $loginFormAuthenticator,
                 'main '
             );
     }
 
     /**
-     * Registers a new user
-     *
-     * Registration has two steps:
-     * - registration via form
-     * - confirming email adress from recieved message (sendConfirmationEmailMessage())
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \Exception
      */
     public function registerAction(Request $request)
     {
+        $em = $this->getDoctrine()->getManager();
         $form = $this->createForm(UserRegistrationForm::class);
 
         $form->handleRequest($request);
@@ -97,7 +108,6 @@ class UserController extends Controller
             /** @var User $user */
             $user = $form->getData();
             $user->setConfirmationToken(bin2hex(random_bytes(10)));
-            $em = $this->getDoctrine()->getManager();
             $em->persist($user);
             $em->flush();
 
@@ -110,25 +120,19 @@ class UserController extends Controller
     }
 
     /**
-     * Edits user data (except of a password)
-     *
-     * All the user entries will be deleted from the database
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function editAction(Request $request)
     {
-        $userId = $this->getUser();
+        $oldUser = $this->getUser();
+        $em = $this->getDoctrine()->getManager();
 
-        $em = $this->getDoctrine()->getRepository('AppBundle:User');
-        $user = $em->findOneBy([
-            "id" => $userId
-        ]);
-
-        $form = $this->createForm(UserEditForm::class, $user);
+        $form = $this->createForm(UserEditForm::class, $oldUser);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $user = $form->getData();
-            $em = $this->getDoctrine()->getManager();
             $em->persist($user);
             $em->flush();
             $this->addFlash('success', 'Profile edited'.$user->getEmail());
@@ -138,29 +142,33 @@ class UserController extends Controller
             'form' => $form->createView()
         ]);
     }
+
     /**
-     * Changes user password
+     * @param Request $request
+     * @param GuardAuthenticatorHandler $guardAuthenticatorHandler
+     * @param LoginFormAuthenticator $loginFormAuthenticator
+     * @param UserPasswordEncoderInterface $passwordEncoder
+     * @return \Symfony\Component\HttpFoundation\Response|null
      */
-    public function changePasswordAction(Request $request)
+    public function changePasswordAction(
+        Request $request,
+        GuardAuthenticatorHandler $guardAuthenticatorHandler,
+        LoginFormAuthenticator $loginFormAuthenticator,
+        UserPasswordEncoderInterface $passwordEncoder
+    )
     {
-        $userId = $this->getUser();
+        $oldUser = $this->getUser();
+        $em = $this->getDoctrine()->getManager();
 
-        $em = $this->getDoctrine()->getRepository('AppBundle:User');
-        $user = $em->findOneBy(
-            array("id" => $userId)
-        );
-
-        $form = $this->createForm(UserChangePasswordForm::class, $user);
+        $form = $this->createForm(UserChangePasswordForm::class, $oldUser);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-
             $user = $form->getData();
-            $em = $this->getDoctrine()->getManager();
 
-            $encoder = $this->get("security.password_encoder")
+            $password = $passwordEncoder
                 ->encodePassword($user, $user->getPlainPassword());
-            $user->setPassword($encoder);
+            $user->setPassword($password);
 
             $em->persist($user);
             $em->flush();
@@ -169,11 +177,11 @@ class UserController extends Controller
                 'Password has been changed'.$user->getEmail()
             );
 
-            return $this->get('security.authentication.guard_handler')
+            return $guardAuthenticatorHandler
                 ->authenticateUserAndHandleSuccess(
                     $user,
                     $request,
-                    $this->get('app.security.login_form_authenticator'),
+                    $loginFormAuthenticator,
                     'main'
                 );
         }
