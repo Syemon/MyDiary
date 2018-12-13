@@ -8,7 +8,7 @@ Project is covered with PHPUnit tests.
 * php 7.2+
 * composer
 
-Getting Started
+####Getting Started
 
 1. Pull project from github repository:
  git clone https://github.com/Syemon/MyDiary.git
