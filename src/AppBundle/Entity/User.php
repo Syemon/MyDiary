@@ -67,12 +67,18 @@ class User implements UserInterface
      */
     private $isActive = false;
 
+    /**
+     * @return string
+     */
     public function getUsername()
     {
         return $this->phoneNumber;
     }
 
-    public function getRoles()
+    /**
+     * @return array
+     */
+    public function getRoles() :array
     {
         $roles = $this->roles;
         if (!in_array('ROLE_USER', $roles)) {
@@ -82,6 +88,9 @@ class User implements UserInterface
         return $roles;
     }
 
+    /**
+     * @return string
+     */
     public function getPassword()
     {
         return $this->password;
@@ -91,57 +100,87 @@ class User implements UserInterface
     {
     }
 
-    public function eraseCredentials()
+    public function eraseCredentials() :void
     {
         $this->plainPassword = null;
     }
 
-    public function setEmail($email)
+    /**
+     * @param string $email
+     */
+    public function setEmail($email) :void
     {
         $this->email = $email;
     }
 
-    public function setPassword($password)
+    /**
+     * @param string $password
+     */
+    public function setPassword($password) :void
     {
         $this->password = $password;
     }
 
+    /**
+     * @return string
+     */
     public function getPlainPassword()
     {
         return $this->plainPassword;
     }
 
-    public function setPlainPassword($plainPassword)
+    /**
+     * @param string $plainPassword
+     */
+    public function setPlainPassword($plainPassword) :void
     {
         $this->plainPassword = $plainPassword;
     }
 
-    public function setRoles($roles)
+    /**
+     * @param array|string $roles
+     */
+    public function setRoles($roles) :void
     {
         $this->roles = $roles;
     }
 
+    /**
+     * @return string
+     */
     public function getEmail()
     {
         return $this->email;
     }
 
+    /**
+     * @return string
+     */
     public function getPhoneNumber()
     {
         return $this->phoneNumber;
     }
 
-    public function setPhoneNumber($phoneNumber)
+    /**
+     * @param string $phoneNumber
+     */
+    public function setPhoneNumber($phoneNumber) :void
     {
         $this->phoneNumber = $phoneNumber;
     }
 
+    /**
+     * @return string
+     */
     public function getNickname()
     {
         return $this->nickname;
     }
 
-    public function setNickname($nickname)
+    /**
+     * @param $nickname
+     */
+    public function setNickname($nickname) :void
     {
         $this->nickname = $nickname;
     }
@@ -159,27 +198,42 @@ class User implements UserInterface
         return $this->getEmail();
     }
 
-    public function getId()
+    /**
+     * @return int
+     */
+    public function getId() :int
     {
         return $this->id;
     }
 
+    /**
+     * @return string
+     */
     public function getConfirmationToken()
     {
         return $this->confirmationToken;
     }
 
-    public function setConfirmationToken($confirmationToken)
+    /**
+     * @param string $confirmationToken
+     */
+    public function setConfirmationToken($confirmationToken) :void
     {
         $this->confirmationToken = $confirmationToken;
     }
 
-    public function getIsActive()
+    /**
+     * @return bool
+     */
+    public function getIsActive() :bool
     {
         return $this->isActive;
     }
 
-    public function setIsActive($isActive)
+    /**
+     * @param boolean $isActive
+     */
+    public function setIsActive($isActive) :void
     {
         $this->isActive = $isActive;
     }
