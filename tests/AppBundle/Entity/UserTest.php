@@ -2,53 +2,63 @@
 
 namespace Tests\AppBundle\Entity;
 
-use AppBundle\Entity\Diary;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use AppBundle\Entity\User;
+use Tests\AbstractWebTestCase;
 
-class UserTest extends WebTestCase
+class UserTest extends AbstractWebTestCase
 {
-    public function testUserGettersAndSetters()
+    /** @var User $user */
+    protected $user;
+
+    public function setUp()
+    {
+        parent::setUp();
+        $this->user = new User();
+    }
+
+    public function testEmailAttribute()
+    {
+        $this->user->setEmail('john@example.com');
+        $this->assertSame('john@example.com', $this->user->getEmail());
+    }
+
+    public function testPhoneNumberAttribute()
+    {
+        $this->user->setPhoneNumber('123123123');
+        $this->assertSame('123123123', $this->user->getPhoneNumber());
+    }
+
+    public function testPasswordAttribute()
+    {
+        $this->user->setPassword('password');
+        $this->assertSame('password', $this->user->getPassword());
+    }
+
+    public function testPlainPasswordAttribute()
+    {
+        $this->user->setPlainPassword('password');
+        $this->assertSame('password', $this->user->getPlainPassword());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testConfirmationTokenAttribute()
     {
         $token = bin2hex(random_bytes(10));
-        $user = new User();
 
-        $user->setEmail('test@gmail.com');
-        $user->setNickname('Nick');
-        $user->setPhoneNumber('123456789');
-        $user->setPlainPassword('qwerty');
-        $user->setIsActive(true);
-        $user->setConfirmationToken($token);
-
-        $this->assertSame('test@gmail.com', $user->getEmail());
-        $this->assertSame('Nick', $user->getNickname());
-        $this->assertSame('123456789', $user->getPhoneNumber());
-        $this->assertSame('qwerty', $user->getPlainPassword());
-        $this->assertSame(true, $user->getIsActive());
-        $this->assertSame($token, $user->getConfirmationToken());
+        $this->user->setConfirmationToken($token);
+        $this->assertSame($token, $this->user->getConfirmationToken());
     }
 
-    public function testDiaryGettersAndSetters()
+    public function testIsActiveAttribute()
     {
-        $diary = new Diary();
-        $currentDate = date_create('now');
-
-        $diary->setNote('Some note');
-        $diary->setAttachment('file.png');
-        $diary->setTitle('Title');
-        $diary->setCreatedAtValue();
-
-        $this->assertSame('file.png', $diary->getAttachment());
-        $this->assertSame('Some note', $diary->getNote());
-        $this->assertSame('Title', $diary->getTitle());
-        $this->assertNotSame($currentDate, $diary->getCreatedAt());
-
+        $this->user->setIsActive(true);
+        $this->assertTrue($this->user->getIsActive());
     }
-    public function testIsActiveDefaultValue()
+
+    public function testIsActiveAttributeDefaultValue()
     {
-        $user = new User();
-
-        $this->assertSame(false, $user->getIsActive());
-
+        $this->assertSame(false, $this->user->getIsActive());
     }
 }
