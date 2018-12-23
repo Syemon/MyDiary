@@ -7,51 +7,15 @@ use AppBundle\Form\UserChangePasswordForm;
 use AppBundle\Form\UserEditForm;
 use AppBundle\Form\UserRegistrationForm;
 use AppBundle\Security\LoginFormAuthenticator;
-use Swift_SmtpTransport;
+use AppBundle\Service\EmailMessageFactory;
+use AppBundle\Service\RegistrationEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-use Symfony\Component\Security\Core\Tests\Encoder\PasswordEncoder;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 
 class UserController extends Controller
 {
-    /**
-     * @param User $user
-     */
-    public function sendConfirmationEmailMessage(User $user)
-    {
-        $transport = new Swift_SmtpTransport(
-            $this->getParameter('mailer_transport'),
-            465, 'ssl'
-        );
-        $transport->setHost($this->getParameter('mailer_host'));
-        $transport->setUsername($this->getParameter('mailer_user'));
-        $transport->setPassword($this->getParameter('mailer_password'));
-
-        $mailer = new \Swift_Mailer($transport);
-
-        $confirmationToken = $user->getConfirmationToken();
-        $subject = "Account activation";
-        $email = $user->getEmail();
-
-        $renderedTemplate = $this->renderView('emails/registration.html.twig', [
-            'user' => $user,
-            'confirmationLink' => '127.0.0.1:8000/activate/'.$confirmationToken
-        ]);
-
-        $message = (new \Swift_Message($subject))
-            ->setFrom($this->getParameter('mailer_user'))
-            ->setTo($email)
-            ->setBody($renderedTemplate,'text/html');
-
-        $mailer->send($message);
-
-        $this->addFlash(
-            'success',
-            'Mail confirmation has been sent on adress: '.$user->getEmail());
-    }
-
     /**
      * @param Request $request
      * @param string $token
@@ -95,10 +59,12 @@ class UserController extends Controller
 
     /**
      * @param Request $request
+     * @param EmailMessageFactory $emailMessageFactory
      * @return \Symfony\Component\HttpFoundation\Response
      * @throws \Exception
+     * @throws \Throwable
      */
-    public function registerAction(Request $request)
+    public function registerAction(Request $request, EmailMessageFactory $emailMessageFactory)
     {
         $em = $this->getDoctrine()->getManager();
         $form = $this->createForm(UserRegistrationForm::class);
@@ -111,7 +77,16 @@ class UserController extends Controller
             $em->persist($user);
             $em->flush();
 
-            $this->sendConfirmationEmailMessage($user);
+            /** @var RegistrationEmail $emailMessenger */
+            $emailMessenger = $emailMessageFactory->getMessenger(EmailMessageFactory::TYPE_REGISTRATION);
+            $emailMessenger
+                ->setAddressee($user)
+                ->sendMail();
+
+            $this->addFlash(
+                'success',
+                sprintf('Mail confirmation has been sent on address: %s',
+                    $user->getEmail()));
         }
 
         return $this->render('user/register.html.twig', [
