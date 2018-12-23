@@ -8,6 +8,15 @@ framework:
     profiler:
         collect: false
 
+services:
+    test_AppBundle\Service\RegistrationEmail:
+        alias: 'AppBundle\Service\RegistrationEmail'
+        public: true
+
+    test_AppBundle\Service\EmailMessageFactory:
+        alias: 'AppBundle\Service\EmailMessageFactory'
+        public: true
+
 doctrine:
     dbal:
         driver: pdo_mysql

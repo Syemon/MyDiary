@@ -1,0 +1,8 @@
+AppBundle\Entity\User:
+    user:
+        nickName: <username()>
+        phoneNumber: 111111111
+        email: fakemail@example.com
+        plainPassword: qwerty123
+        roles: ['ROLE_ADMIN']
+        isActive: true

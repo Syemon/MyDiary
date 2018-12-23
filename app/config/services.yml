@@ -44,6 +44,14 @@ services:
         arguments:
             $targetDir: '%file_directory%'
 
+    AppBundle\Service\RegistrationEmail:
+        class: 'AppBundle\Service\RegistrationEmail'
+        arguments:
+            $mailerUser: '%mailer_user%'
+
+    AppBundle\Service\EmailMessageFactory:
+        class: 'AppBundle\Service\EmailMessageFactory'
+
     app.security.login_form_authenticator:
         class: AppBundle\Security\LoginFormAuthenticator
 
