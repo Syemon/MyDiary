@@ -2,11 +2,8 @@
 
 namespace Tests\AppBundle\Service;
 
-use AppBundle\DataFixtures\ORM\LoadUserFixture;
-use AppBundle\Entity\User;
 use AppBundle\Service\EmailMessageFactory;
 use AppBundle\Service\RegistrationEmail;
-use Swift_Message;
 use Swift_Plugins_MessageLogger;
 use Tests\AbstractWebTestCase;
 
