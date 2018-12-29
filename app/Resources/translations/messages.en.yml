@@ -1,5 +1,13 @@
 account_status: Account status
 add: Add
+alert.user.removed: User removed
+alert.user.edited: Profile edited
+alert.user.changed_password: Password has been changed
+alert.user.mail_confirmation: Mail confirmation has been sent on address
+alert.diary.created: Diary created
+alert.diary.entry_limit: You can make only one entry per day
+alert.diary.removed: Diary removed
+alert.diary.updated: Diary updated
 attachment: Attachment
 change_password: Change password
 check_user_posts: Check user posts

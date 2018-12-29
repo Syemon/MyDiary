@@ -37,34 +37,32 @@ class AdminController extends Controller
     }
 
     /**
-     * @param integer $id
+     * @param User $user
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function deleteAction($id)
+    public function deleteAction(User $user)
     {
+        $translator = $this->get('translator');
         $em = $this->getDoctrine()->getManager();
-        $user = $em->getRepository(User::class)->find($id);
 
         $em->remove($user);
         $em->flush();
 
         $this->addFlash(
             'success',
-            sprintf('User removed')
+            $translator->trans('alert.user.removed')
         );
 
         return $this->redirectToRoute('admin_users_list');
     }
 
     /**
-     * @param integer $id
+     * @param User $user
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function showUserDiaryAction($id)
+    public function showUserDiaryAction(User $user)
     {
         $em =  $this->getDoctrine()->getManager();
-        $user = $em->getRepository(User::class)->find($id);
-
         $diaries = $em->getRepository(Diary::class)->findAllUserDiaries($user);
 
         return $this->render('diary/list.html.twig', [

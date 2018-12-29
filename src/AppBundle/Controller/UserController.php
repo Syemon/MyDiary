@@ -29,6 +29,7 @@ class UserController extends Controller
         GuardAuthenticatorHandler $guardAuthenticatorHandler,
         LoginFormAuthenticator $loginFormAuthenticator)
     {
+        $translator = $this->get('translator');
         $em = $this->getDoctrine()->getManager();
 
         /** @var User $user */
@@ -46,7 +47,8 @@ class UserController extends Controller
         $em->persist($user);
         $em->flush();
 
-        $this->addFlash('success', 'Welcome '.$user->getNickname().'!');
+        $this->addFlash('success', sprintf('%s %s!',
+            $translator->trans('welcome') ,$user->getNickname()));
 
         return $guardAuthenticatorHandler
             ->authenticateUserAndHandleSuccess(
@@ -66,6 +68,7 @@ class UserController extends Controller
      */
     public function registerAction(Request $request, EmailMessageFactory $emailMessageFactory)
     {
+        $translator = $this->get('translator');
         $em = $this->getDoctrine()->getManager();
         $form = $this->createForm(UserRegistrationForm::class);
 
@@ -85,8 +88,8 @@ class UserController extends Controller
 
             $this->addFlash(
                 'success',
-                sprintf('Mail confirmation has been sent on address: %s',
-                    $user->getEmail()));
+                sprintf('%s: %s',
+                    $translator->trans('alert.user.mail_confirmation'), $user->getEmail()));
         }
 
         return $this->render('user/register.html.twig', [
@@ -100,6 +103,8 @@ class UserController extends Controller
      */
     public function editAction(Request $request)
     {
+        $translator = $this->get('translator');
+
         $oldUser = $this->getUser();
         $em = $this->getDoctrine()->getManager();
 
@@ -110,7 +115,7 @@ class UserController extends Controller
             $user = $form->getData();
             $em->persist($user);
             $em->flush();
-            $this->addFlash('success', 'Profile edited'.$user->getEmail());
+            $this->addFlash('success', $translator->trans('alert.user.edited'));
         }
 
         return $this->render('user/edit.html.twig', [
@@ -132,6 +137,7 @@ class UserController extends Controller
         UserPasswordEncoderInterface $passwordEncoder
     )
     {
+        $translator = $this->get('translator');
         $oldUser = $this->getUser();
         $em = $this->getDoctrine()->getManager();
 
@@ -149,7 +155,7 @@ class UserController extends Controller
             $em->flush();
             $this->addFlash(
                 'success',
-                'Password has been changed'.$user->getEmail()
+                $translator->trans('alert.user.changed_password')
             );
 
             return $guardAuthenticatorHandler

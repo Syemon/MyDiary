@@ -36,6 +36,8 @@ class DiaryController extends Controller
      */
     public function newAction(Request $request, DiaryHelper $diaryHelper)
     {
+        $translator = $this->get('translator');
+
         $user = $this ->getUser();
         $em = $this->getDoctrine()->getManager();
 
@@ -51,13 +53,7 @@ class DiaryController extends Controller
                 $em->persist($diary);
                 $em->flush();
 
-                $this->addFlash(
-                    'success',
-                    sprintf(
-                        'Diary created, (%s)',
-                        $this->getUser()->getEmail()
-                    )
-                );
+                $this->addFlash('success', $translator->trans('alert.diary.created'));
 
                 return $this->redirectToRoute('diary_list');
             }
@@ -67,27 +63,24 @@ class DiaryController extends Controller
             ]);
         }
 
-        $this->addFlash(
-            'danger',
-            sprintf('You can make only one entry per day (%s)',
-                $this->getUser()->getEmail())
-        );
+        $this->addFlash('danger', $translator->trans('alert.diary.entry_limit'));
 
         return $this->redirectToRoute('diary_list');
     }
 
     /**
-     * @param $id
      * @param Request $request
      * @param Diary $diary
      * @param DiaryHelper $diaryHelper
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
-    public function editAction($id,
-                               Request $request,
-                               Diary $diary,
-                               DiaryHelper $diaryHelper
+    public function editAction(
+        Request $request,
+        Diary $diary,
+        DiaryHelper $diaryHelper
     ) {
+        $translator = $this->get('translator');
+
         $em = $this->getDoctrine()->getManager();
 
         $form = $this->createForm(DiaryForm::class, $diary);
@@ -101,7 +94,7 @@ class DiaryController extends Controller
             $em->persist($diary);
             $em->flush();
 
-            $this->addFlash('success', 'Diary updated');
+            $this->addFlash('success', $translator->trans('alert.diary.updated'));
 
             return $this->redirectToRoute('diary_list');
         }
@@ -112,14 +105,15 @@ class DiaryController extends Controller
     }
 
     /**
-     * @param $id
+     * @param Diary $diary
      * @param DiaryHelper $diaryHelper
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function deleteAction($id, DiaryHelper $diaryHelper)
+    public function deleteAction(Diary $diary, DiaryHelper $diaryHelper)
     {
+        $translator = $this->get('translator');
+
         $em = $this->getDoctrine()->getManager();
-        $diary = $em->getRepository(Diary::class)->find($id);
         $diaryHelper->removePreviousAttachment($diary);
 
         $em->remove($diary);
@@ -127,7 +121,7 @@ class DiaryController extends Controller
 
         $this->addFlash(
             'success',
-            sprintf('Diary removed, (%s)', $this->getUser()->getEmail())
+            $translator->trans('alert.diary.removed')
         );
 
         return $this->redirectToRoute('diary_list');
@@ -139,21 +133,19 @@ class DiaryController extends Controller
      */
     public function getFilesAction($file)
     {
-        $path = $this ->container->getParameter('file_directory');
+        $path = $this->container->getParameter('file_directory');
         return new BinaryFileResponse("$path/$file");
     }
 
     /**
-     * @param $id
+     * @param Diary $diary
      * @return BinaryFileResponse
      * @throws \Exception
      */
-    public function createDiaryPdfAction($id)
+    public function createDiaryPdfAction(Diary $diary)
     {
         $path = $this->container->getParameter('pdf_directory');
         $file = bin2hex(random_bytes(10)).'.pdf';
-
-        $diary = $this->getDoctrine()->getRepository(Diary::class)->find($id);
 
         $this->get('knp_snappy.pdf')->generateFromHtml(
             $this->renderView('diary/pdf.html.twig', [

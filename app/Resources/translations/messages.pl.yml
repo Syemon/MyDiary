@@ -1,5 +1,13 @@
 account_status: Status konta
 add: Dodaj
+alert.user.removed: Użytkownik został usunięty
+alert.user.edited: Profil zostal zedytowany
+alert.user.changed_password: Hasło zostało zmienione
+alert.user.mail_confirmation: Potwiedzenie konta zostało wysłane na adres mailowy
+alert.diary.created: Wpis został stworzony
+alert.diary.entry_limit: Możesz dodać tylko jeden wpis na dzień
+alert.diary.removed: Wpis został usunięty
+alert.diary.updated: Wpis został zaktualizowany
 attachment: Załącznik
 change_password: Zmień hasło
 check_user_posts: Sprawdź wpisy użytkownika
