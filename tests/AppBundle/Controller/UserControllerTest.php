@@ -2,9 +2,11 @@
 
 namespace Tests\AppBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use AppBundle\DataFixtures\ORM\LoadUserFixture;
+use AppBundle\Entity\User;
+use Tests\AbstractWebTestCase;
 
-class UserControllerTest extends WebTestCase
+class UserControllerTest extends AbstractWebTestCase
 {
     public function testRegisterAction()
     {
@@ -12,11 +14,9 @@ class UserControllerTest extends WebTestCase
         $client->followRedirects(true);
         $crawler = $client->request('GET', '/');
 
-        // Crawler goes to the login page
         $link = $crawler->selectLink('Login')->link();
         $crawler = $client->click($link);
 
-        // Crawler goes to the registration page
         $link = $crawler->selectLink('Register')->link();
         $crawler = $client->click($link);
 
@@ -24,10 +24,10 @@ class UserControllerTest extends WebTestCase
 
         $crawler = $client->submit($form, array(
             'user_registration_form[nickname]' => 'nick',
-            'user_registration_form[email]' => 'szymo1990@gmail.com',
-            'user_registration_form[phoneNumber]' => '111',
-            'user_registration_form[plainPassword][first]' => '1',
-            'user_registration_form[plainPassword][second]' => '1'
+            'user_registration_form[email]' => 'lorem.ipsum@example.com',
+            'user_registration_form[phoneNumber]' => '111222333',
+            'user_registration_form[plainPassword][first]' => 'qwerty123',
+            'user_registration_form[plainPassword][second]' => 'qwerty123'
         ));
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
@@ -35,22 +35,29 @@ class UserControllerTest extends WebTestCase
 
     public function testLoginAction()
     {
+        $this->container = self::$kernel->getContainer();
+        $translator = $this->container->get('translator');
+
+        $fixture = new LoadUserFixture();
+        $fixture->load($this->entityManager);
+        /** @var User $user */
+        $user = $this->entityManager->getRepository(User::class)->findAll()[0];
+
         $client = static::createClient();
         $client->followRedirects(true);
         $crawler = $client->request('GET', '/');
 
-        // Crawler goes to the login page
         $link = $crawler->selectLink('Login')->link();
         $crawler = $client->click($link);
 
         $form = $crawler->selectButton('Login')->form();
 
         $crawler = $client->submit($form, array(
-            'login_form[_username]' => '111111111',
-            'login_form[_password]' => 'iliketurtles',
+            'login_form[_username]' => $user->getPhoneNumber(),
+            'login_form[_password]' => $user->getPlainPassword(),
           ));
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertSame('Your Diaries', $crawler->filter('h1')->eq(1)->text());
+        $this->assertSame($translator->trans('user_diary'), $crawler->filter('h1')->eq(1)->text());
     }
 }

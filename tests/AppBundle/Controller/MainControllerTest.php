@@ -2,9 +2,9 @@
 
 namespace Tests\AppBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Tests\AbstractWebTestCase;
 
-class MainControllerTest extends WebTestCase
+class MainControllerTest extends AbstractWebTestCase
 {
     public function testHomepageAction()
     {
