@@ -4,15 +4,15 @@
     <div class="container">
         <div class="row">
             <div class="col-xs-12">
-                <h1>Edit</h1>
+                <h1>{{ 'edit'|trans }}</h1>
 
                 {{ form_start(form) }}
                     {{ form_row(form.nickname) }}
                     {{ form_row(form.email) }}
                     {{ form_row(form.phoneNumber) }}
 
-                    <button type="submit" class="btn btn-primary" formnovalidate>Edit</button>
-                <a href="{{ path('user_change_password') }}" >Change password</a>
+                    <button type="submit" class="btn btn-primary" formnovalidate>{{ 'edit'|trans }}</button>
+                <a href="{{ path('user_change_password') }}" >{{ 'change_password'|trans }}</a>
                 {{ form_end(form) }}
 
             </div>

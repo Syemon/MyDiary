@@ -6,6 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -19,17 +20,21 @@ class DiaryForm extends AbstractType
     {
 
         $builder
-            ->add('title')
-            ->add('note', TextareaType::class)
-            ->add('attachment', FileType::class, array(
-                'label' => 'file upload (pdf, jpeg, png)',
+            ->add('title', TextType::class, [
+                'label' => 'form.title'
+            ])
+            ->add('note', TextareaType::class, [
+                    'label' => 'form.note'
+            ])
+            ->add('attachment', FileType::class, [
+                'label' => 'form.file_upload',
                 'data_class' => null
 
-            ))
-            ->add('user', HiddenType::class, array(
+            ])
+            ->add('user', HiddenType::class, [
                 'data_class' => 'AppBundle\Entity\User',
                 'mapped' => false
-            ));
+            ]);
     }
 
     /**

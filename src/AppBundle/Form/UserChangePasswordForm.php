@@ -22,6 +22,7 @@ class UserChangePasswordForm extends AbstractType
         $builder
             ->add('current_password',
                 PasswordType::class, [
+                    'label' => 'form.current_password',
                     'mapped' => false,
                     'constraints' => [
                         new NotBlank(),

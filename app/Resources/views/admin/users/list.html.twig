@@ -4,16 +4,16 @@
     <div class="container">
         <div class="row">
             <div class="col-xs-12">
-                <h1>Diaries</h1>
+                <h1>{{ 'users'|trans }}</h1>
 
                 <table class="table table-striped">
                     <tr>
-                        <th>Nick</th>
-                        <th>E-mail</th>
-                        <th>Phone number</th>
-                        <th>Account status</th>
-                        <th>Check user posts</th>
-                        <th>Delete</th>
+                        <th>{{ 'nickname'|trans }}</th>
+                        <th>{{ 'email'|trans }}</th>
+                        <th>{{ 'phone_number'|trans }}</th>
+                        <th>{{ 'account_status'|trans }}</th>
+                        <th>{{ 'check_user_posts'|trans }}</th>
+                        <th>{{ 'delete'|trans }}</th>
                     </tr>
                     {% for user in users %}
                         <tr>

@@ -1,0 +1,40 @@
+account_status: Status konta
+add: Dodaj
+attachment: Załącznik
+change_password: Zmień hasło
+check_user_posts: Sprawdź wpisy użytkownika
+create_diary_entry: Stwórz wpis
+date: Data
+delete: Usuń
+diary: Pamiętnik
+diaries: Pamiętniki
+edit: Edytuj
+edit_diary: Edytuj pamiętnik
+email: E-mail
+full_diaries_list: Pełna lista pamiętników
+phone_number: Numer telefonu
+form.current_password: Obecne hasło
+form.email: E-mail
+form.file_upload: Wysłanie pliku (pdf, jpeg, png)
+form.note: Notatka
+form.new_password: Nowe hasło
+form.new_password_confirmation: Powtórz nowe hasło
+form.nickname: Nick
+form.password: Hasło
+form.phone_number: Numer telefonu
+form.repeat_password: Powtórz hasło
+form.title: Tytuł
+form.username: Nazwa użytkownika
+generate_pdf: Wygeneruj pdf
+login: Zaloguj
+logout: Wyloguj
+nickname: Nick
+note: Notatka
+register: Zarejestuj
+user_list: Lista użytkowników
+save: Zapisz
+title: Tytuł
+user: Użytkownik
+user_diary: Twój pamiętnik
+users: Użytkownicy
+welcome: Witaj

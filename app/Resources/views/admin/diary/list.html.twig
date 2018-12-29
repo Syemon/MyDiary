@@ -4,15 +4,15 @@
     <div class="container">
         <div class="row">
             <div class="col-xs-12">
-                <h1>Diaries</h1>
+                <h1>{{ 'diaries'|trans }}</h1>
 
                 <table class="table table-striped">
                     <tr>
-                        <th>User</th>
-                        <th>Title</th>
-                        <th>Note</th>
-                        <th>Attachment</th>
-                        <th>Date</th>
+                        <th>{{ 'user'|trans }}</th>
+                        <th>{{ 'title'|trans }}</th>
+                        <th>{{ 'note'|trans }}</th>
+                        <th>{{ 'attachment'|trans }}</th>
+                        <th>{{ 'date'|trans }}</th>
                     </tr>
                     {% for user in users %}
                         <tr>

@@ -21,17 +21,17 @@
             <h1 class="logo">MyDiary</h1>
             <ul class="navi">
                 {% if is_granted('ROLE_ADMIN') %}
-                    <li><a href="{{ path('diary_list') }}">Diary</a></li>
-                    <li><a href="{{ path('admin_diaries_list') }}">Full diaries list</a></li>
-                    <li><a href="{{ path('admin_users_list') }}">Users list</a></li>
-                    <li><a href="{{ path('user_edit') }}">Edit</a></li>
-                    <li><a href="{{ path('security_logout') }}">Logout</a></li>
+                    <li><a href="{{ path('diary_list') }}">{{ 'diary'|trans }}</a></li>
+                    <li><a href="{{ path('admin_diaries_list') }}">{{ 'full_diaries_list'|trans }}</a></li>
+                    <li><a href="{{ path('admin_users_list') }}">{{ 'user_list'|trans }}</a></li>
+                    <li><a href="{{ path('user_edit') }}">{{ 'edit'|trans }}</a></li>
+                    <li><a href="{{ path('security_logout') }}">{{ 'logout'|trans }}</a></li>
                 {% elseif is_granted('IS_AUTHENTICATED_FULLY') %}
-                    <li><a href="{{ path('diary_list') }}">Diary</a></li>
-                    <li><a href="{{ path('user_edit') }}">Edit</a></li>
-                    <li><a href="{{ path('security_logout') }}">Logout</a></li>
+                    <li><a href="{{ path('diary_list') }}">{{ 'diary'|trans }}</a></li>
+                    <li><a href="{{ path('user_edit') }}">{{ 'edit'|trans }}</a></li>
+                    <li><a href="{{ path('security_logout') }}">{{ 'logout'|trans }}</a></li>
                 {% else %}
-                    <li><a href="{{ path('security_login') }}">Login</a></li>
+                    <li><a href="{{ path('security_login') }}">{{ 'login'|trans }}</a></li>
                 {% endif %}
             </ul>
         </header>

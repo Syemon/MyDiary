@@ -1,0 +1,40 @@
+account_status: Account status
+add: Add
+attachment: Attachment
+change_password: Change password
+check_user_posts: Check user posts
+create_diary_entry: Create diary entry
+date: Date
+delete: Delete
+diary: Diary
+diaries: Diaries
+edit: Edit
+edit_diary: Edit diary
+email: Email
+full_diaries_list: Full diaries list
+phone_number: Phone number
+form.current_password: Current password
+form.email: Email
+form.file_upload: File upload (pdf, jpeg, png)
+form.note: Note
+form.new_password: New password
+form.new_password_confirmation: Repeat new password
+form.nickname: Nickname
+form.password: Password
+form.phone_number: Phone number
+form.repeat_password: Repeat password
+form.title: Title
+form.username: Username
+generate_pdf: Generate pdf
+login: Login
+logout: Logout
+nickname: Nickname
+note: Note
+register: Register
+user_list: User list
+save: Save
+title: Title
+user: User
+user_diary: Your diary
+users: Users
+welcome: Welcome
